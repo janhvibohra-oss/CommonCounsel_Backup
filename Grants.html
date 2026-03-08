@@ -1,0 +1,457 @@
+<div id="page-funding" class="page">
+<div class="fund-hero">
+  <div style="position:relative;z-index:1">
+    <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);padding:6px 14px;border-radius:100px;font-size:12px;font-weight:600;color:rgba(255,255,255,.7);margin-bottom:20px">💰 Grant Database</div>
+    <h1>$30 Billion in Funding.<br><span class="gt">Find What's Yours.</span></h1>
+    <p>CommonCounsel matches you to every federal, provincial, and profile-specific program you qualify for — and pre-fills the application.</p>
+    <button class="btn-cw" onclick="gp('eligibility')" style="margin-bottom:0">Check my eligibility →</button>
+  </div>
+  <div class="fund-hero-stats" style="margin-top:48px">
+    <div class="fhs"><div class="fhs-n">$30B+</div><div class="fhs-l">Available annually</div></div>
+    <div class="fhs"><div class="fhs-n">400+</div><div class="fhs-l">Programs tracked</div></div>
+    <div class="fhs"><div class="fhs-n">98%</div><div class="fhs-l">Match accuracy</div></div>
+    <div class="fhs"><div class="fhs-n">All 13</div><div class="fhs-l">Provinces & territories</div></div>
+  </div>
+</div>
+<div class="fund-filter">
+  <button class="ff-pill active" onclick="filterGrants(this,'all')">All Programs</button>
+  <button class="ff-pill" onclick="filterGrants(this,'federal')">🇨🇦 Federal</button>
+  <button class="ff-pill" onclick="filterGrants(this,'regional')">🗺️ Regional</button>
+  <button class="ff-pill" onclick="filterGrants(this,'women')">👩 Women</button>
+  <button class="ff-pill" onclick="filterGrants(this,'indigenous')">🪶 Indigenous</button>
+  <button class="ff-pill" onclick="filterGrants(this,'newcomer')">🌍 Newcomer</button>
+  <button class="ff-pill" onclick="filterGrants(this,'youth')">🧑 Youth</button>
+  <button class="ff-pill" onclick="filterGrants(this,'tech')">💻 Tech</button>
+  <button class="btn-pill" style="margin-left:auto" onclick="gp('eligibility')"><span>Check my eligibility →</span></button>
+</div>
+<div class="fund-grid-wrap">
+  <div class="fund-grid" id="grant-grid"></div>
+</div>
+</div>
+
+<div id="page-eligibility" class="page">
+<div class="elig-wrap">
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:24px">
+    <button onclick="gp('funding')" style="background:#f4f4f4;border:none;width:36px;height:36px;border-radius:50%;cursor:none;font-size:16px;display:flex;align-items:center;justify-content:center;transition:background .2s" onmouseover="this.style.background='var(--border)'" onmouseout="this.style.background='#f4f4f4'">←</button>
+    <span style="font-size:13px;color:var(--light)">Back to Grants</span>
+  </div>
+  <h1>Check Your Eligibility</h1>
+  <p>Answer a few questions and we'll instantly show every grant and loan program you qualify for.</p>
+  <div class="elig-card">
+    <h3>📍 About Your Business</h3>
+    <div class="elig-q"><label>Business Type</label><select id="elig-type"><option value="">Select...</option><option>Food & Beverage</option><option>Retail</option><option>Trades / Construction</option><option>Health & Wellness</option><option>Tech & Creative</option><option>Hospitality</option><option>Agriculture</option><option>Transportation</option><option>Other</option></select></div>
+    <div class="elig-q"><label>Province or Territory</label><select id="elig-prov"><option value="">Select...</option><option>Ontario</option><option>British Columbia</option><option>Alberta</option><option>Quebec</option><option>Manitoba</option><option>Saskatchewan</option><option>Nova Scotia</option><option>New Brunswick</option><option>Newfoundland & Labrador</option><option>Prince Edward Island</option><option>Yukon</option><option>Northwest Territories</option><option>Nunavut</option></select></div>
+    <div class="elig-q"><label>Annual Revenue</label><select id="elig-rev"><option value="">Select...</option><option>Pre-revenue / Startup</option><option>Under $100K</option><option>$100K – $500K</option><option>$500K – $2M</option><option>$2M+</option></select></div>
+    <div class="elig-q"><label>Number of Employees</label><select><option value="">Select...</option><option>Just me (sole proprietor)</option><option>2–5</option><option>6–20</option><option>21–100</option><option>100+</option></select></div>
+  </div>
+  <div class="elig-card">
+    <h3>👤 Your Profile <span style="font-size:12px;font-weight:400;color:var(--light)">(unlocks additional funding)</span></h3>
+    <div class="elig-checks-grid">
+      <div class="elig-ck" onclick="this.classList.toggle('sel')">👩 Woman-owned</div>
+      <div class="elig-ck" onclick="this.classList.toggle('sel')">🧑‍🦱 Visible minority</div>
+      <div class="elig-ck" onclick="this.classList.toggle('sel')">🪶 Indigenous-owned</div>
+      <div class="elig-ck" onclick="this.classList.toggle('sel')">🌍 Newcomer entrepreneur</div>
+      <div class="elig-ck" onclick="this.classList.toggle('sel')">🧑 Youth (under 35)</div>
+      <div class="elig-ck" onclick="this.classList.toggle('sel')">🌄 Rural business</div>
+    </div>
+  </div>
+  <div class="elig-card">
+    <h3>🎯 What do you need funding for?</h3>
+    <div class="elig-checks-grid">
+      <div class="elig-ck" onclick="this.classList.toggle('sel')">🏗️ Equipment / Capital</div>
+      <div class="elig-ck" onclick="this.classList.toggle('sel')">💻 Digital adoption</div>
+      <div class="elig-ck" onclick="this.classList.toggle('sel')">👥 Hiring / Training</div>
+      <div class="elig-ck" onclick="this.classList.toggle('sel')">🌍 Export / Expansion</div>
+      <div class="elig-ck" onclick="this.classList.toggle('sel')">🔬 R&D / Innovation</div>
+      <div class="elig-ck" onclick="this.classList.toggle('sel')">🏠 Leasehold improvements</div>
+    </div>
+  </div>
+  <button class="btn-check" onclick="runEligibility()"><span>🔍 Find my funding now →</span></button>
+  <div class="elig-results" id="elig-results">
+    <h3>🎉 You qualify for funding!</h3>
+    <p id="elig-count">Based on your profile, here's what you may be eligible for:</p>
+    <div class="er-total" id="elig-total">$47,500</div>
+    <p style="color:rgba(255,255,255,.4);font-size:12px;margin-bottom:16px">Total potential funding across matched programs</p>
+    <div id="elig-matches"></div>
+    <button class="mod-btn" onclick="gp('ob')" style="margin-top:12px"><span>Start my application →</span></button>
+  </div>
+</div>
+</div>
+
+<div id="page-db" class="page">
+<div class="db-layout">
+  <div class="db-side">
+    <div class="db-biz"><h4>🏢 My Business</h4><p>Your location · Your industry</p><div class="db-health"><div class="db-hp">Business Health <span>0%</span></div><div class="db-ht"><div class="db-hf" style="width:0%"></div></div></div></div>
+    <div class="db-nav">
+      <a class="dblk active" id="tab-overview" onclick="showTab('overview',this)"><span class="ico">🏠</span>Overview</a>
+      <a class="dblk" id="tab-roadmap" onclick="showTab('roadmap',this)"><span class="ico">🗺️</span>My Roadmap</a>
+      <a class="dblk" onclick="openDV('vault')"><span class="ico">📁</span>Document Vault</a>
+      <a class="dblk" id="tab-funding" onclick="showTab('funding-db',this)"><span class="ico">💰</span>Funding</a>
+      <a class="dblk" id="tab-compliance" onclick="showTab('compliance-db',this)"><span class="ico">🔔</span>Compliance</a>
+      <a class="dblk" id="tab-ai" onclick="showTab('ai',this)"><span class="ico">🤖</span>AI Advisor</a>
+      <a class="dblk" onclick="gp('home')"><span class="ico">←</span>Back to site</a>
+    </div>
+    <div class="db-dl">
+      <h5>Upcoming Deadlines</h5>
+      <div class="dli am"><p>GST/HST Filing</p><span>Due in 14 days</span></div>
+      <div class="dli gn"><p>Business Licence Renewal</p><span>Due in 32 days</span></div>
+      <div class="dli gn"><p>Annual Corporate Return</p><span>Due in 67 days</span></div>
+    </div>
+  </div>
+  <div class="db-main">
+    <div id="db-tab-overview">
+      <div class="dbw"><h2>Welcome 👋</h2><p>Complete your profile to get started</p></div>
+      <div class="db-alert" id="db-next-alert"><div class="ai">⚡</div><div><h4 id="db-next-title">Complete your setup</h4><p id="db-next-sub">Fill out your profile to get your personalized roadmap</p></div><button class="btn-dal" id="db-next-btn" onclick="showTab('roadmap',document.getElementById('tab-roadmap'))">View Roadmap →</button></div>
+      <div class="db-panels">
+        <div class="dp">
+          <div class="dph"><h3>🗺️ My Roadmap</h3><button class="db-btn" onclick="showTab('roadmap',document.getElementById('tab-roadmap'))">View full timeline →</button></div>
+          <div class="rm-list" id="db-roadmap-mini"></div>
+        </div>
+        <div class="dp">
+          <div class="dph"><h3>📁 Document Vault</h3><button class="db-btn" onclick="openDV('vault')">View all →</button></div>
+          <div class="dg" id="db-docs-mini"></div>
+        </div>
+        <div class="dp">
+          <div class="dph"><h3>💰 Funding Matches</h3><button class="db-btn" onclick="showTab('funding-db',document.getElementById('tab-funding'))">See all →</button></div>
+          <div class="ft-tot"><p>Total you may qualify for</p><h3>$47,500</h3></div>
+          <div class="gr-list">
+            <div class="gr"><div class="gr-top"><b>Newcomer Entrepreneur Program</b><span>$22,000</span></div><div class="gr-bot"><span class="gr-m">98% match</span><span class="gr-d">Rolling deadline</span></div><button class="btn-gr" onclick="openMod('grant-det')">Start application →</button></div>
+            <div class="gr"><div class="gr-top"><b>FedDev Ontario Hospitality</b><span>$15,000</span></div><div class="gr-bot"><span class="gr-m">87% match</span><span class="gr-d">Due Mar 31</span></div><button class="btn-gr" onclick="openMod('grant-det')">Start application →</button></div>
+          </div>
+        </div>
+        <div class="dp">
+          <div class="dph"><h3>🔔 Compliance</h3><button class="db-btn" onclick="showTab('compliance-db',document.getElementById('tab-compliance'))">Full calendar →</button></div>
+          <div class="cl-list">
+            <div class="cl"><div class="cl-dot cd-am"></div><div class="cl-i"><b>GST/HST Quarterly Filing</b><span>CRA · Federal · Due March 31</span></div><span class="cl-d cda">14 days</span></div>
+            <div class="cl"><div class="cl-dot cd-gn"></div><div class="cl-i"><b>Toronto Business Licence Renewal</b><span>City of Toronto · Municipal</span></div><span class="cl-d cdg">32 days</span></div>
+            <div class="cl"><div class="cl-dot cd-gn"></div><div class="cl-i"><b>Ontario Annual Corporate Return</b><span>ServiceOntario · Provincial</span></div><span class="cl-d cdg">67 days</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="db-tab-roadmap" style="display:none">
+      <div class="dbw"><h2>🗺️ My Roadmap</h2><p>Your business · Your location</p></div>
+      <div style="background:#fff;border:1px solid var(--border);border-radius:16px;padding:28px">
+        <div class="timeline-wrap" id="db-timeline"></div>
+      </div>
+    </div>
+    <div id="db-tab-funding-db" style="display:none">
+      <div class="dbw"><h2>💰 My Funding Matches</h2><p id="db-fund-sub">Based on your profile</p></div>
+      <div style="background:var(--grad);border-radius:16px;padding:24px;margin-bottom:20px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px">
+        <div><p style="font-size:12px;color:rgba(255,255,255,.6);margin-bottom:4px">Total Available</p><p style="font-size:36px;font-weight:800;color:#fff;letter-spacing:-1.5px">$47,500</p></div>
+        <div><p style="font-size:12px;color:rgba(255,255,255,.6);margin-bottom:4px">Programs Matched</p><p style="font-size:36px;font-weight:800;color:#fff;letter-spacing:-1.5px">3</p></div>
+        <div><p style="font-size:12px;color:rgba(255,255,255,.6);margin-bottom:4px">Avg Match Score</p><p style="font-size:36px;font-weight:800;color:#fff;letter-spacing:-1.5px">92%</p></div>
+      </div>
+      <div id="funding-cards" style="display:flex;flex-direction:column;gap:14px"></div>
+    </div>
+    <div id="db-tab-compliance-db" style="display:none">
+      <div class="dbw"><h2>🔔 Compliance Calendar</h2><p>All deadlines across federal, provincial, and municipal requirements</p></div>
+      <div style="background:#fff;border:1px solid var(--border);border-radius:16px;padding:24px">
+        <div id="db-compliance-top" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px"></div>
+        <div class="cl-list" id="db-compliance-list"></div>
+      </div>
+    </div>
+    <div id="db-tab-ai" style="display:none">
+      </div>
+  </div>
+</div>
+</div>
+
+<script>
+// USER STATE
+let currentUser = {name:'', fullName:'', business:'', city:'', province:'', industry:'', stage:'', goals:[], demographics:[]};
+
+function showTab(id, el){
+  ['overview','roadmap','funding-db','compliance-db','ai'].forEach(t=>{const d=document.getElementById('db-tab-'+t);if(d)d.style.display='none';});
+  const tab=document.getElementById('db-tab-'+id);
+  if(tab)tab.style.display='block';
+  document.querySelectorAll('.dblk').forEach(a=>a.classList.remove('active'));
+  if(el)el.classList.add('active');
+}
+
+function getProvLicenceInfo(prov){
+  const map={'Ontario':'City licence required · $195 · 1–2 weeks','British Columbia':'City of Vancouver Business Licence · ~$145 · 1–3 weeks','Alberta':'City business licence · ~$100–$300 · 1–2 weeks','Quebec':'Municipal permit required · Varies by city'};
+  return map[prov] || 'Municipal licence required · Cost varies by city · 1–3 weeks';
+}
+
+function industryEmoji(ind){
+  const map={'Food & Beverage':'🍔','Retail':'🛍️','Trades':'🔨','Health & Wellness':'💆','Tech & Creative':'💻','Hospitality':'🏨','Agriculture':'🌾','Transport':'🚚'};
+  return map[ind]||'🏢';
+}
+
+function populateDashboard(){
+  const n = currentUser.name || 'there';
+  const b = currentUser.business || 'My Business';
+  const fn = currentUser.fullName || n;
+  const loc = [currentUser.city, currentUser.province].filter(Boolean).join(', ') || 'Canada';
+  const ind = currentUser.industry || '';
+  const prov = currentUser.province || 'Ontario';
+
+  const bizEl = document.querySelector('.db-biz h4');
+  if(bizEl) bizEl.textContent = (ind ? industryEmoji(ind)+' ' : '🏢 ') + b;
+  const bizSub = document.querySelector('.db-biz p');
+  if(bizSub) bizSub.textContent = loc + (ind ? ' · ' + ind : '');
+
+  const welcome = document.querySelector('#db-tab-overview .dbw h2');
+  if(welcome) welcome.textContent = 'Welcome, ' + n + ' 👋';
+  const welcomeSub = document.querySelector('#db-tab-overview .dbw p');
+  if(welcomeSub) welcomeSub.textContent = b + ' · ' + loc;
+
+  const rmHead = document.querySelector('#db-tab-roadmap .dbw p');
+  if(rmHead) rmHead.textContent = b + ' · ' + loc + ' · Step 1 of roadmap in progress';
+
+  const fundSub = document.getElementById('db-fund-sub');
+  if(fundSub) fundSub.textContent = 'Based on your profile — ' + (ind||'Business') + ' · ' + loc;
+
+  const stage = currentUser.stage || '';
+  const alertTitle = document.getElementById('db-next-title');
+  const alertSub = document.getElementById('db-next-sub');
+  if(alertTitle && alertSub){
+    if(stage.includes('Just Getting')||stage===''){
+      alertTitle.textContent = 'First step: Register your Federal Business Number';
+      alertSub.textContent = 'Free · Same day · Required before any other registration';
+    } else if(stage.includes('Registered')){
+      alertTitle.textContent = 'Next: Apply for your Business Licence';
+      alertSub.textContent = getProvLicenceInfo(prov);
+    } else if(stage.includes('Running')){
+      alertTitle.textContent = 'Next: Check your GST/HST filing deadline';
+      alertSub.textContent = 'CRA · Quarterly · File before April 30';
+    } else {
+      alertTitle.textContent = 'Next: Review your compliance calendar';
+      alertSub.textContent = 'Stay ahead of all your renewal and filing deadlines';
+    }
+  }
+
+  buildRoadmap(b, fn, ind, prov, currentUser.city||'your city');
+  if(typeof buildDocVault==='function') buildDocVault(b, fn, ind, prov, currentUser.city||'your city');
+  buildCompliance(prov, ind, b);
+
+  if(typeof buildWelcomeMsg==='function') {
+    const welcomeMsg = buildWelcomeMsg();
+    chatHistory = [{role:'assistant', content: welcomeMsg}];
+    sidebarChatHistory = [{role:'assistant', content:'Hi! Ask me about grants, documents, regulations, or compliance deadlines.'}];
+    const chatMsgs = document.getElementById('chat-msgs');
+    if(chatMsgs){ chatMsgs.innerHTML=''; addMsg(welcomeMsg,'ai'); }
+  }
+}
+
+function buildRoadmap(biz, person, ind, prov, city){
+  const steps = [
+    {status:'todo', title:'Federal Business Number (BN)', tag:'fed', tagLabel:'Federal', cost:'Free', time:'Same day', link:'https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/registering-your-business/register.html', linkLabel:'CRA Business Registration →', doc:null},
+    {status:'todo', title:'GST/HST Registration (CRA)', tag:'fed', tagLabel:'Federal', cost:'Free', time:'Same day (if >$30K revenue)', link:'https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/gst-hst-businesses/account-register.html', linkLabel:'CRA GST/HST Registration →', doc:'gst'},
+  ];
+
+  if(prov==='Ontario'||!prov){
+    steps.push({status:'todo', title:'Ontario Business Registration', tag:'prov', tagLabel:'Provincial', cost:'$60', time:'Immediate', link:'https://www.ontario.ca/page/ontario-business-registry', linkLabel:'Ontario Business Registry →', doc:'ont'});
+    steps.push({status:'todo', title:`${city||'Municipal'} Business Licence`, tag:'mun', tagLabel:'Municipal', cost:'$195', time:'1–2 weeks', link:'https://www.ontario.ca/page/ontario-business-registry', linkLabel:'ServiceOntario →', doc:'licence'});
+  } else if(prov==='British Columbia'){
+    steps.push({status:'todo', title:'BC Business Name Registration', tag:'prov', tagLabel:'Provincial', cost:'$31', time:'Immediate', link:'https://www.bcregistry.gov.bc.ca', linkLabel:'BC Registries →', doc:'ont'});
+    steps.push({status:'todo', title:`${city||'City'} Business Licence`, tag:'mun', tagLabel:'Municipal', cost:'~$145', time:'1–3 weeks', link:'https://www.bcregistry.gov.bc.ca', linkLabel:'BC Registries →', doc:'licence'});
+  } else if(prov==='Alberta'){
+    steps.push({status:'todo', title:'Alberta Business Registration (NUANS)', tag:'prov', tagLabel:'Provincial', cost:'$60', time:'Immediate', link:'https://www.alberta.ca/register-business', linkLabel:'Alberta Business Registration →', doc:'ont'});
+    steps.push({status:'todo', title:`${city||'City'} Business Licence`, tag:'mun', tagLabel:'Municipal', cost:'~$150', time:'1–2 weeks', link:'https://www.alberta.ca/register-business', linkLabel:'Alberta.ca →', doc:'licence'});
+  } else {
+    steps.push({status:'todo', title:`${prov} Business Registration`, tag:'prov', tagLabel:'Provincial', cost:'Varies', time:'1–5 days', link:'https://www.canada.ca/en/services/business/start.html', linkLabel:'Canada.ca Business Registration →', doc:'ont'});
+    steps.push({status:'todo', title:`${city||'City'} Business Licence`, tag:'mun', tagLabel:'Municipal', cost:'Varies', time:'1–3 weeks', link:'https://www.canada.ca/en/services/business/start.html', linkLabel:'Canada.ca →', doc:'licence'});
+  }
+
+  if(ind==='Food & Beverage'||ind==='Hospitality'){
+    steps.push({status:'todo', title:'Food Handler Certificate', tag:'prov', tagLabel:'Provincial', cost:'$35–$80', time:'1 day', link:'https://www.canada.ca/en/public-health/services/food-safety.html', linkLabel:'Food Safety Canada →', doc:'food'});
+    steps.push({status:'todo', title:'Health Inspection', tag:'mun', tagLabel:'Municipal', cost:'Free', time:'Scheduled', link:'https://www.canada.ca/en/public-health.html', linkLabel:'Public Health Canada →', doc:null});
+  }
+  if(ind==='Trades'){
+    steps.push({status:'todo', title:'Trade Qualification / Red Seal', tag:'prov', tagLabel:'Provincial', cost:'$100–$400', time:'Varies', link:'https://www.red-seal.ca', linkLabel:'Red Seal Program →', doc:null});
+  }
+  if(ind==='Health & Wellness'){
+    steps.push({status:'todo', title:'Professional Regulatory Body Registration', tag:'prov', tagLabel:'Provincial', cost:'Varies', time:'2–6 weeks', link:'https://www.canada.ca/en/health-canada.html', linkLabel:'Health Canada →', doc:null});
+  }
+
+  steps.push({status:'todo', title:'WSIB Registration (if hiring)', tag:'prov', tagLabel:'Provincial', cost:'Premium-based', time:'Within 10 days of first hire', link:'https://www.wsib.ca/en/businesses/registering-your-business', linkLabel:'wsib.ca →', doc:'wsib'});
+  steps.push({status:'todo', title:'Articles of Incorporation (optional)', tag:'fed', tagLabel:'Federal', cost:'$200', time:'1–5 days', link:'https://ised-isde.canada.ca/site/corporations-canada/en/incorporating-federal-corporation', linkLabel:'Corporations Canada →', doc:'inc'});
+
+  if(steps.length>0) steps[0].status='current';
+
+  const tl = document.getElementById('db-timeline');
+  if(tl) tl.innerHTML = steps.map((s,i)=>{
+    const nodeClass = s.status==='done'?'done':s.status==='current'?'current':'todo';
+    const nodeLabel = s.status==='done'?'✓':s.status==='current'?'→':(i+1);
+    const statusClass = s.status==='done'?'st-done':s.status==='current'?'st-cur':'st-todo';
+    const statusLabel = s.status==='done'?'✓ Complete':s.status==='current'?'⏳ In Progress':'○ Upcoming';
+    return `<div class="tl-item">
+      <div class="tl-left"><div class="tl-node ${nodeClass}">${nodeLabel}</div></div>
+      <div class="tl-right">
+        <div class="tl-header"><span class="tl-title">${s.title}</span><span class="tl-tag ${s.tag}">${s.tagLabel}</span><span class="tl-status ${statusClass}">${statusLabel}</span></div>
+        <div class="tl-meta"><span>💰 Cost: <strong>${s.cost}</strong></span><span>⏱ Time: <strong>${s.time}</strong></span></div>
+        <a class="tl-link" href="${s.link}" target="_blank">🔗 ${s.linkLabel}</a>
+        ${s.doc?`<div style="margin-top:8px"><button onclick="openDV('${s.doc}')" style="font-size:12px;font-weight:700;background:var(--blue-l);color:var(--blue);border:none;padding:6px 14px;border-radius:100px;cursor:none;font-family:'Inter',sans-serif">Get pre-filled document →</button></div>`:''}
+      </div>
+    </div>`;
+  }).join('');
+
+  const mini = document.getElementById('db-roadmap-mini');
+  if(mini) mini.innerHTML = steps.slice(0,5).map(s=>{
+    const dotClass = s.status==='done'?'rd-ok':s.status==='current'?'rd-cur':'rd-todo';
+    const dotLabel = s.status==='done'?'✓':s.status==='current'?'→':'';
+    const tagClass = s.tag==='fed'?'rf':s.tag==='prov'?'rp':'rm';
+    return `<div class="rmi${s.status==='current'?' cur':''}"><div class="rdot ${dotClass}">${dotLabel}</div><div class="ri2"><b>${s.title}</b><span>${s.cost}</span></div><span class="rtg ${tagClass}">${s.tagLabel}</span></div>`;
+  }).join('');
+}
+
+function buildDocVault(biz, person, ind, prov, city){
+  const BIZ = biz.toUpperCase();
+  const allDocs = [
+    {id:'inc', label:'Articles of Incorporation', level:'Federal', status:'Ready', cls:'ds-ok'},
+    {id:'ont', label:`${prov||'Provincial'} Business Registration`, level:'Provincial', status:'Ready', cls:'ds-ok'},
+    {id:'licence', label:`${city||'City'} Business Licence`, level:'Municipal', status:'Pending', cls:'ds-pd'},
+    {id:'gst', label:'GST/HST Registration', level:'Federal', status:'Done', cls:'ds-ok'},
+    {id:'emp', label:'Employment Agreement', level:'Provincial', status:'Ready', cls:'ds-ok'},
+    {id:'nda', label:'Non-Disclosure Agreement', level:'General', status:'Ready', cls:'ds-ok'},
+    {id:'sha', label:'Shareholder Agreement', level:'Federal', status:'Ready', cls:'ds-ok'},
+    {id:'vendor', label:'Vendor Agreement', level:'General', status:'Ready', cls:'ds-ok'},
+    {id:'privacy', label:'PIPEDA Privacy Policy', level:'Federal', status:'Ready', cls:'ds-ok'},
+    {id:'cipo', label:'CIPO Trademark Application', level:'Federal', status:'Draft', cls:'ds-pd'},
+  ];
+
+  if(ind==='Food & Beverage'||ind==='Hospitality'){
+    allDocs.push({id:'food', label:'Food Handler Certificate App', level:'Provincial', status:'Pending', cls:'ds-pd'});
+  }
+  allDocs.push({id:'wsib', label:'WSIB Registration', level:'Provincial', status:'Ready', cls:'ds-ok'});
+
+  if(typeof docs !== 'undefined'){
+    docs.vault.title = `📁 Document Vault — ${biz}`;
+    docs.vault.html = `<p style="font-size:14px;color:var(--mid);margin-bottom:20px;font-weight:400">All documents pre-filled with your business information. Click any to preview, then download PDF.</p><div style="display:grid;grid-template-columns:1fr 1fr;gap:9px">${allDocs.map(({id,label,level,status,cls})=>`<div onclick="openDV('${id}')" style="padding:12px;border:1px solid var(--border);border-radius:10px;cursor:none;display:flex;align-items:center;gap:8px;transition:all .2s" onmouseover="this.style.borderColor='var(--blue)';this.style.background='var(--blue-l)'" onmouseout="this.style.borderColor='var(--border)';this.style.background='#fff'"><span>📄</span><div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:700;color:var(--dark);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${label}</div><div style="font-size:10px;color:var(--light)">${level}</div></div><span style="font-size:9px;font-weight:700;padding:2px 7px;border-radius:100px;white-space:nowrap" class="${cls}">${status}</span></div>`).join('')}</div>`;
+
+    function fill(html){ return html.replace(/Pita Palace Inc\./g, biz+' Inc.').replace(/PITA PALACE INC\./g,BIZ+' INC.').replace(/PITA PALACE/g,BIZ).replace(/Pita Palace/g,biz).replace(/Amir Haddad/g,person).replace(/123 King Street West, Toronto, Ontario, M5H 1J9/g,city+(prov?', '+prov:'')+', Canada').replace(/privacy@pitapalace\.ca/g,'privacy@'+biz.toLowerCase().replace(/\s+/g,'')+'.ca').replace(/PITA PALACE \(word mark\)/g,BIZ+' (word mark)').replace(/Fast-casual Mediterranean restaurant and catering services/g,ind?ind+' business services':'Business services'); }
+    Object.keys(docs).forEach(k=>{ if(docs[k].html) docs[k].html = fill(docs[k].html); });
+  }
+
+  const miniDocs = document.getElementById('db-docs-mini');
+  if(miniDocs) miniDocs.innerHTML = allDocs.slice(0,6).map(({id,label,level,status,cls})=>`<div class="di" onclick="openDV('${id}')"><div class="di-ic">📄</div><div class="di-n"><b>${label}</b><span>${level}</span></div><span class="di-s ${cls}">${status}</span></div>`).join('');
+}
+
+function buildCompliance(prov, ind, biz){
+  const items = [
+    {label:'GST/HST Quarterly Filing', sub:'CRA · Federal · Due March 31', days:14, urgent:true, url:'https://www.canada.ca/en/revenue-agency/services/e-services/digital-services-businesses/gst-hst-netfile.html', urlLabel:'File online at CRA →'},
+    {label:'Business Licence Renewal', sub:(prov||'Municipal')+' · Annual', days:32, urgent:false, url:'https://www.canada.ca/en/services/business/permits.html', urlLabel:'Renew online →'},
+    {label:(prov||'Ontario')+' Annual Corporate Return', sub:'ServiceOntario / Provincial', days:67, urgent:false, url:'https://www.ontario.ca/page/ontario-business-registry', urlLabel:'Renew at provincial registry →'},
+    {label:'WSIB Premium Remittance', sub:'WSIB · Quarterly', days:90, urgent:false, url:'https://www.wsib.ca', urlLabel:'wsib.ca →'},
+  ];
+  if(ind==='Food & Beverage'||ind==='Hospitality'){
+    items.push({label:'Health Inspection Renewal', sub:'Public Health · Annual', days:120, urgent:false, url:'https://www.canada.ca/en/public-health.html', urlLabel:'Public Health Canada →'});
+    items.push({label:'Food Handler Certificate Renewal', sub:'Provincial · Every 5 years', days:156, urgent:false, url:'https://www.canada.ca/en/public-health/services/food-safety.html', urlLabel:'Food Safety Canada →'});
+  }
+
+  const top = document.getElementById('db-compliance-top');
+  if(top) top.innerHTML = items.slice(0,2).map(it=>`<div style="background:${it.urgent?'var(--amber-bg)':'var(--green-bg)'};border-radius:12px;padding:16px"><p style="font-size:11px;font-weight:700;color:${it.urgent?'var(--amber)':'var(--green)'};margin-bottom:2px">${it.urgent?'⚠️ URGENT':'✓ On Track'} — ${it.days} days</p><p style="font-size:14px;font-weight:700;color:var(--dark)">${it.label}</p><p style="font-size:12px;color:var(--mid)">${it.sub}</p><a href="${it.url}" target="_blank" style="font-size:11px;font-weight:700;color:${it.urgent?'var(--orange)':'var(--green)'};text-decoration:none;display:inline-block;margin-top:6px">${it.urlLabel}</a></div>`).join('');
+
+  const list = document.getElementById('db-compliance-list');
+  if(list) list.innerHTML = items.map(it=>`<div class="cl"><div class="cl-dot" style="background:${it.urgent?'#f59e0b':'#22c55e'}"></div><div class="cl-i"><b>${it.label}</b><span>${it.sub}</span></div><span class="cl-d" style="color:${it.urgent?'#f59e0b':'#22c55e'}">${it.days} days</span></div>`).join('');
+
+  const sideDl = document.querySelector('.db-dl');
+  if(sideDl) sideDl.innerHTML = `<h5>Upcoming Deadlines</h5>${items.slice(0,3).map(it=>`<div class="dli ${it.urgent?'am':'gn'}"><p>${it.label}</p><span>Due in ${it.days} days</span></div>`).join('')}`;
+}
+
+// GRANTS DATABASE
+const grants=[
+  {name:'Canada Small Business Financing Program',amount:'Up to $1,150,000',type:'federal',tag:'🇨🇦 Federal',desc:'Government-backed loans for equipment, leasehold improvements, and real property.',deadline:'Rolling',match:85,url:'https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/changes-your-business/government-assistance-subsidy.html',apply:'https://ised-isde.canada.ca/site/canada-small-business-financing-program/en'},
+  {name:'Canada Digital Adoption Program (CDAP)',amount:'Up to $15,000',type:'federal tech',tag:'💻 Federal Tech',desc:'Grant for adopting digital tools, e-commerce, and technology modernization.',deadline:'Apr 15, 2026',match:92,url:'https://ised-isde.canada.ca/site/canada-digital-adoption-program/en',apply:'https://ised-isde.canada.ca/site/canada-digital-adoption-program/en/boost-your-business-technology'},
+  {name:'CanExport SMEs',amount:'Up to $50,000',type:'federal',tag:'🇨🇦 Federal',desc:'Funding to help small businesses develop new export markets internationally.',deadline:'Rolling',match:70,url:'https://www.tradecommissioner.gc.ca/funding-financement/canexport/sme-pme/index.aspx?lang=eng',apply:'https://www.tradecommissioner.gc.ca/funding-financement/canexport/sme-pme/index.aspx?lang=eng'},
+  {name:'BDC Small Business Loans',amount:'Up to $100,000',type:'federal',tag:'🇨🇦 Federal',desc:'Flexible financing for small businesses from Canada\'s business development bank.',deadline:'Rolling',match:88,url:'https://www.bdc.ca/en/financing',apply:'https://www.bdc.ca/en/financing/business-loans/small-business-loan'},
+  {name:'NRC IRAP',amount:'Up to $500,000',type:'federal tech',tag:'💻 Tech',desc:'Industrial Research Assistance Program for innovative and tech-focused SMEs.',deadline:'Rolling',match:65,url:'https://nrc.canada.ca/en/support-technology-innovation/nrc-irap',apply:'https://nrc.canada.ca/en/support-technology-innovation/nrc-irap'},
+  {name:'FedDev Ontario',amount:'Up to $100,000',type:'regional',tag:'🗺️ Ontario',desc:'Southern Ontario-specific funding for economic development and growth.',deadline:'Mar 31, 2026',match:87,url:'https://www.feddevontario.gc.ca/eic/site/723.nsf/eng/home',apply:'https://www.feddevontario.gc.ca/eic/site/723.nsf/eng/00121.html'},
+  {name:'PacifiCan',amount:'Up to $200,000',type:'regional',tag:'🗺️ BC',desc:'Pacific Economic Development Canada funding for BC-based businesses.',deadline:'Rolling',match:75,url:'https://www.pacific.gc.ca/en',apply:'https://www.pacific.gc.ca/en/funding'},
+  {name:'ACOA Atlantic Fund',amount:'Up to $75,000',type:'regional',tag:'🗺️ Atlantic',desc:'Atlantic Canada Opportunities Agency business development funding.',deadline:'Rolling',match:72,url:'https://www.acoa-apec.ca/en',apply:'https://www.acoa-apec.ca/en/business/funding'},
+  {name:'Women Entrepreneurship Strategy (WES)',amount:'Up to $100,000',type:'women',tag:'👩 Women',desc:'Federal program dedicated to helping women-owned businesses grow and scale.',deadline:'Rolling',match:90,url:'https://ised-isde.canada.ca/site/women-entrepreneurship-strategy/en',apply:'https://ised-isde.canada.ca/site/women-entrepreneurship-strategy/en/wes-ecosystem-fund'},
+  {name:'BDC Women in Tech',amount:'Up to $250,000',type:'women tech',tag:'👩 Women Tech',desc:'Dedicated financing for women-led tech businesses.',deadline:'Rolling',match:80,url:'https://www.bdc.ca/en/about/diversity-inclusion/women-entrepreneurs',apply:'https://www.bdc.ca/en/about/diversity-inclusion/women-entrepreneurs'},
+  {name:'Black Entrepreneurship Program',amount:'Up to $250,000',type:'indigenous',tag:'🧑‍🦱 Minority',desc:'Federal program supporting Black business owners in Canada.',deadline:'Rolling',match:85,url:'https://ised-isde.canada.ca/site/black-entrepreneurship-program/en',apply:'https://ised-isde.canada.ca/site/black-entrepreneurship-program/en/black-entrepreneurship-loan-fund'},
+  {name:'NACCA Indigenous Capital',amount:'Up to $150,000',type:'indigenous',tag:'🪶 Indigenous',desc:'National Aboriginal Capital Corporations Association financing for Indigenous entrepreneurs.',deadline:'Rolling',match:88,url:'https://www.nacca.ca',apply:'https://www.nacca.ca/financing/'},
+  {name:'Ontario Newcomer Entrepreneur Fund',amount:'Up to $22,000',type:'newcomer',tag:'🌍 Newcomer',desc:'Non-repayable grants for newcomer and immigrant entrepreneurs in Ontario.',deadline:'Rolling',match:95,url:'https://www.ontario.ca/page/newcomer-entrepreneur-support',apply:'https://www.ontario.ca/page/newcomer-entrepreneur-support'},
+  {name:'Futurpreneur Canada',amount:'Up to $15,000',type:'youth',tag:'🧑 Youth',desc:'Financing and mentorship for entrepreneurs aged 18–39, with BDC co-lending.',deadline:'Rolling',match:82,url:'https://www.futurpreneur.ca/en/',apply:'https://www.futurpreneur.ca/en/get-started/'},
+  {name:'Rural Economic Development Fund',amount:'Up to $50,000',type:'regional',tag:'🌄 Rural',desc:'Ontario funding for businesses in rural communities and small towns.',deadline:'Rolling',match:78,url:'https://www.ontario.ca/page/rural-economic-development-program',apply:'https://www.ontario.ca/page/rural-economic-development-program'},
+];
+
+(function renderFundingCards(){
+  const fc = [
+    ['Newcomer Entrepreneur Program','$22,000','98%','Rolling deadline','Non-repayable grant for newcomer and immigrant entrepreneurs in Ontario.','https://www.ontario.ca/page/newcomer-entrepreneur-support'],
+    ['FedDev Ontario — Food & Hospitality','$15,000','87%','Due Mar 31, 2026','Regional development funding for food service businesses in southern Ontario.','https://www.feddevontario.gc.ca/eic/site/723.nsf/eng/home'],
+    ['Canada Digital Adoption Program (CDAP)','$10,500','92%','Due Apr 15, 2026','Federal grant to help small businesses adopt digital tools and e-commerce.','https://ised-isde.canada.ca/site/canada-digital-adoption-program/en']
+  ];
+  const container = document.getElementById('funding-cards');
+  if(!container) return;
+  container.innerHTML = fc.map(([n,a,m,d,desc,url]) => `
+    <div style="background:#fff;border:1px solid var(--border);border-radius:14px;padding:20px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
+        <div>
+          <p style="font-size:15px;font-weight:700;color:var(--dark);margin-bottom:4px">${n}</p>
+          <p style="font-size:13px;color:var(--mid)">${desc}</p>
+        </div>
+        <div style="text-align:right;flex-shrink:0;margin-left:16px">
+          <p style="font-size:24px;font-weight:800;color:var(--green);letter-spacing:-1px">${a}</p>
+          <p style="font-size:11px;color:var(--light)">${d}</p>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;margin-bottom:12px">
+        <span style="font-size:10px;font-weight:700;background:var(--green-bg);color:var(--green);padding:3px 9px;border-radius:100px">${m} match</span>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button onclick="openMod('grant-det')" style="flex:1;padding:9px;background:var(--dark);color:#fff;border:none;border-radius:100px;font-size:12px;font-weight:700;cursor:none;font-family:'Inter',sans-serif" onmouseover="this.style.background='var(--blue)'" onmouseout="this.style.background='var(--dark)'">Start pre-filled application →</button>
+        <a href="${url}" target="_blank" style="padding:9px 16px;border:1.5px solid var(--border);border-radius:100px;font-size:12px;font-weight:700;color:var(--blue);text-decoration:none;white-space:nowrap">Official site 🔗</a>
+      </div>
+    </div>`).join('');
+})();
+
+function renderGrants(filter){
+  const grid=document.getElementById('grant-grid');
+  if(!grid)return;
+  const filtered=filter==='all'?grants:grants.filter(g=>g.type.includes(filter));
+  grid.innerHTML=filtered.map(g=>`
+    <div class="grant-card">
+      <div class="gc-top">
+        <div class="gc-badges"><span class="gc-badge" style="background:var(--blue-l);color:var(--blue)">${g.tag}</span></div>
+        <div class="gc-amount">${g.amount}</div>
+        <div class="gc-name">${g.name}</div>
+        <div class="gc-desc">${g.desc}</div>
+        <div class="match-bar" style="margin-top:10px"><div class="match-fill" style="width:${g.match}%"></div></div>
+        <div style="font-size:10px;color:var(--light);margin-top:3px">${g.match}% eligibility match</div>
+      </div>
+      <div class="gc-mid">
+        <div class="gc-row"><span>Deadline</span><strong>${g.deadline}</strong></div>
+        <div class="gc-row"><span>Type</span><strong>${g.type.includes('federal')?'Non-repayable Grant / Loan':'Grant'}</strong></div>
+      </div>
+      <div class="gc-bot">
+        <button class="btn-gc-apply" onclick="window.open('${g.apply}','_blank')"><span>Apply at official site 🔗</span></button>
+        <button class="btn-gc-info" onclick="window.open('${g.url}','_blank')">Info</button>
+      </div>
+    </div>`).join('');
+}
+
+function filterGrants(btn,filter){
+  document.querySelectorAll('.ff-pill').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderGrants(filter);
+}
+
+function runEligibility(){
+  const type=document.getElementById('elig-type').value;
+  const prov=document.getElementById('elig-prov').value;
+  const selected=document.querySelectorAll('#page-eligibility .elig-ck.sel');
+  const profiles=[...selected].map(el=>el.textContent.trim());
+  const results=document.getElementById('elig-results');
+  const matchesEl=document.getElementById('elig-matches');
+  const matched=[];
+  let total=0;
+  if(profiles.some(p=>p.includes('Newcomer'))){matched.push({n:'Ontario Newcomer Entrepreneur Fund',a:'$22,000',m:'98%'});total+=22000;}
+  if(profiles.some(p=>p.includes('Woman'))){matched.push({n:'Women Entrepreneurship Strategy (WES)',a:'$50,000',m:'90%'});total+=50000;}
+  if(profiles.some(p=>p.includes('Youth'))){matched.push({n:'Futurpreneur Canada',a:'$15,000',m:'82%'});total+=15000;}
+  if(profiles.some(p=>p.includes('Indigenous'))){matched.push({n:'NACCA Indigenous Capital',a:'$150,000',m:'88%'});total+=150000;}
+  if(profiles.some(p=>p.includes('minority'))){matched.push({n:'Black Entrepreneurship Program',a:'$250,000',m:'85%'});total+=250000;}
+  matched.push({n:'Canada Digital Adoption Program',a:'$15,000',m:'92%'});total+=15000;
+  matched.push({n:'BDC Small Business Loan',a:'$100,000',m:'85%'});total+=100000;
+  if(prov==='Ontario'||prov===''){matched.push({n:'FedDev Ontario',a:'$50,000',m:'87%'});total+=50000;}
+  document.getElementById('elig-total').textContent='$'+total.toLocaleString();
+  document.getElementById('elig-count').textContent=`Based on your profile, you match ${matched.length} programs:`;
+  matchesEl.innerHTML=matched.map(m=>`<div class="er-item"><span class="er-item-name">${m.n}</span><span style="font-size:10px;color:rgba(255,255,255,.5);margin-right:8px">${m.m}</span><span class="er-item-amt">${m.a}</span></div>`).join('');
+  results.classList.add('show');
+  results.scrollIntoView({behavior:'smooth',block:'start'});
+}
+</script>
