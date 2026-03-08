@@ -1,0 +1,186 @@
+<div id="db-tab-ai" style="display:none">
+  <div class="dbw"><h2>🤖 AI Legal Advisor</h2><p>Ask anything about your business — regulations, documents, grants, compliance</p></div>
+  <div class="ai-chat">
+    <div class="ai-chat-msgs" id="chat-msgs">
+      <div class="msg ai">Hi! I'm your CommonCounsel AI advisor. I can help you with questions about your business — regulations, documents, grants, compliance deadlines, or anything else. What do you need?</div>
+    </div>
+    <div class="ai-starters">
+      <button class="ai-starter" onclick="aiQ(this)">What licences do I still need?</button>
+      <button class="ai-starter" onclick="aiQ(this)">When is my GST filing due?</button>
+      <button class="ai-starter" onclick="aiQ(this)">How do I apply for the Newcomer grant?</button>
+      <button class="ai-starter" onclick="aiQ(this)">Do I need a food handler certificate?</button>
+    </div>
+    <div class="ai-chat-input">
+      <input type="text" id="chat-input" placeholder="Ask about your business..." onkeydown="if(event.key==='Enter')sendChat()">
+      <button class="btn-ai-send" onclick="sendChat()"><span>Send →</span></button>
+    </div>
+  </div>
+</div>
+
+<div class="ai-sidebar" id="ai-sidebar">
+  <div class="ai-sidebar-head">
+    <div style="display:flex;justify-content:space-between;align-items:center;width:100%">
+      <div>
+        <h3>🤖 CommonCounsel AI</h3>
+        <p>Ask anything about your business</p>
+      </div>
+      <button style="background:none;border:none;color:var(--mid);font-size:20px;cursor:pointer;padding:4px;transition:color .2s" onmouseover="this.style.color='var(--dark)'" onmouseout="this.style.color='var(--mid)'" onclick="toggleAISidebar()">✕</button>
+    </div>
+  </div>
+  <div class="ai-sidebar-msgs" id="ai-sidebar-msgs">
+    <div class="ai-msg ai"><div class="txt">Hi! Ask me about grants, documents, regulations, or compliance deadlines.</div></div>
+  </div>
+  <div class="ai-sidebar-input">
+    <input type="text" id="ai-sidebar-input" placeholder="Ask your question..." onkeydown="if(event.key==='Enter')sendSidebarChat()">
+    <button onclick="sendSidebarChat()">Send</button>
+  </div>
+</div>
+<button class="ai-toggle" id="ai-toggle" onclick="toggleAISidebar()">🤖</button>
+
+<script>
+// AI CHAT LOGIC
+function buildSystem(){
+  const n=currentUser?.name||'there';
+  const b=currentUser?.business||'your business';
+  const city=currentUser?.city||'your city';
+  const prov=currentUser?.province||'your province';
+  const ind=currentUser?.industry||'general business';
+  const stage=currentUser?.stage||'';
+  const goals=(currentUser?.goals||[]).join(', ')||'grow their business';
+  const demo=(currentUser?.demographics||[]).join(', ')||'';
+  return `You are the CommonCounsel AI Legal Advisor for Canadian small businesses. The user is ${n}, owner of ${b}, a ${ind} business located in ${city}, ${prov}.
+${stage?'Business stage: '+stage+'.':''}
+${goals?'Their goals: '+goals+'.':''}
+${demo?'Demographics/special programs applicable: '+demo+'.':''}
+
+You help with:
+- Business registration and licensing requirements (federal, provincial, municipal)
+- Government grants and funding programs for Canadian small businesses
+- Compliance deadlines and requirements
+- Document requirements and where to submit them
+- Tax obligations (GST/HST, payroll, corporate)
+
+Always cite official Canadian government websites (canada.ca, ontario.ca, toronto.ca, etc.) when relevant. Be concise but thorough. Mention actual costs, deadlines, and links when possible. You are NOT a law firm. For complex legal matters, recommend consulting a qualified lawyer.`;
+}
+
+function buildWelcomeMsg(){
+  const n=currentUser?.name||'there';
+  const b=currentUser?.business||'your business';
+  const ind=currentUser?.industry?` ${currentUser.industry}`:'';
+  const loc=currentUser?.city?` in ${currentUser.city}`:'';
+  return `Hi ${n}! I'm your CommonCounsel AI advisor. I can help you with everything for ${b}${ind?', your'+ind+' business':''} — licences, grants, compliance deadlines, documents, and more. What do you need?`;
+}
+
+let chatHistory=[];
+let sidebarChatHistory=[{role:'assistant',content:'Hi! Ask me about grants, documents, regulations, or compliance deadlines.'}];
+
+function addMsg(text,role){
+  const el=document.createElement('div');
+  el.className='msg '+role;
+  el.textContent=text;
+  const msgsEl=document.getElementById('chat-msgs');
+  msgsEl.appendChild(el);
+  msgsEl.scrollTop=msgsEl.scrollHeight;
+}
+
+function aiQ(btn){
+  document.getElementById('chat-input').value=btn.textContent;
+  sendChat();
+}
+
+async function sendChat(){
+  const input=document.getElementById('chat-input');
+  if(!input)return;
+  const q=input.value.trim();
+  if(!q)return;
+  input.value='';
+  input.disabled=true;
+  addMsg(q,'user');
+  chatHistory.push({role:'user',content:q});
+  
+  const loadId='load-'+Date.now();
+  const msgsEl=document.getElementById('chat-msgs');
+  const loadEl=document.createElement('div');
+  loadEl.className='msg ai loading';loadEl.id=loadId;
+  loadEl.innerHTML='<div class="dot"></div><div class="dot"></div><div class="dot"></div>';
+  msgsEl.appendChild(loadEl);
+  msgsEl.scrollTop=msgsEl.scrollHeight;
+  
+  try{
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Anthropic-Version':'2023-06-01'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:buildSystem(),messages:chatHistory})
+    });
+    const el=document.getElementById(loadId);
+    if(el)el.remove();
+    if(!resp.ok) throw new Error('API Error');
+    const data=await resp.json();
+    const reply=data.content?.[0]?.text||'Error.';
+    chatHistory.push({role:'assistant',content:reply});
+    addMsg(reply,'ai');
+  }catch(e){
+    const el=document.getElementById(loadId);
+    if(el)el.remove();
+    addMsg('The AI advisor is offline right now. Tip: Explore the Document Vault instead!','ai');
+  }
+  input.disabled=false;
+  input.focus();
+}
+
+function toggleAISidebar(){
+  const sidebar=document.getElementById('ai-sidebar');
+  if(sidebar) sidebar.classList.toggle('hidden');
+}
+
+function addSidebarMsg(text,role){
+  const el=document.createElement('div');
+  el.className='ai-msg '+role;
+  el.innerHTML=`<div class="txt">${text}</div>`;
+  const msgsEl=document.getElementById('ai-sidebar-msgs');
+  msgsEl.appendChild(el);
+  msgsEl.scrollTop=msgsEl.scrollHeight;
+}
+
+async function sendSidebarChat(){
+  const input=document.getElementById('ai-sidebar-input');
+  if(!input)return;
+  const q=input.value.trim();
+  if(!q)return;
+  input.value='';
+  input.disabled=true;
+  
+  addSidebarMsg(q,'user');
+  sidebarChatHistory.push({role:'user',content:q});
+  
+  const msgsEl=document.getElementById('ai-sidebar-msgs');
+  const loadId='load-'+Date.now();
+  const loadEl=document.createElement('div');
+  loadEl.className='ai-msg loading';
+  loadEl.id=loadId;
+  loadEl.innerHTML='<div class="txt"><div class="ai-dots"><span></span><span></span><span></span></div></div>';
+  msgsEl.appendChild(loadEl);
+  msgsEl.scrollTop=msgsEl.scrollHeight;
+  
+  try{
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Anthropic-Version':'2023-06-01'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,system:buildSystem(),messages:sidebarChatHistory})
+    });
+    const el=document.getElementById(loadId);
+    if(el)el.remove();
+    if(!resp.ok) throw new Error('API Error');
+    const data=await resp.json();
+    const reply=data.content?.[0]?.text||'Error.';
+    sidebarChatHistory.push({role:'assistant',content:reply});
+    addSidebarMsg(reply,'ai');
+  }catch(e){
+    const el=document.getElementById(loadId);
+    if(el)el.remove();
+    addSidebarMsg('The AI advisor is offline. Try again soon!','ai');
+  }
+  input.disabled=false;
+  input.focus();
+}
+</script>
