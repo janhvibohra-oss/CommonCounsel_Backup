@@ -1,0 +1,1598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CommonCounsel — Canada's Business Growth Co-Pilot</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* MEMBER 1: CSS FRAMEWORK & VARIABLES */
+:root {
+  --blue:#20407F; --blue-l:#eef2fb; --blue-m:#4a72c4;
+  --orange:#DD4B0B; --orange-l:#fdf0eb;
+  --purple:#8B2FC9; --purple-l:#f3eafb;
+  --grad:linear-gradient(135deg,#20407F 0%,#8B2FC9 50%,#DD4B0B 100%);
+  --grad-soft:linear-gradient(135deg,rgba(32,64,127,.07) 0%,rgba(139,47,201,.05) 50%,rgba(221,75,11,.05) 100%);
+  --dark:#111; --mid:#555; --light:#999;
+  --border:#ebebeb; --white:#fff;
+  --green:#15803d; --green-bg:#dcfce7;
+  --amber:#92400e; --amber-bg:#fef3c7;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:#fff;color:var(--dark);overflow-x:hidden;cursor:none}
+#cur{width:6px;height:6px;background:var(--blue);border-radius:50%;position:fixed;z-index:9999;pointer-events:none;transform:translate(-50%,-50%);transition:width .2s,height .2s,background .2s}
+#cur-ring{width:28px;height:28px;border:1.5px solid rgba(32,64,127,.3);border-radius:50%;position:fixed;z-index:9998;pointer-events:none;transform:translate(-50%,-50%);transition:border-color .2s,transform .3s}
+body.hovering #cur{width:10px;height:10px;background:var(--purple)}
+body.hovering #cur-ring{border-color:rgba(139,47,201,.4);transform:translate(-50%,-50%) scale(1.8)}
+body.clicking #cur{background:var(--orange);transform:translate(-50%,-50%) scale(.7)}
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 48px;transition:transform .4s cubic-bezier(.23,1,.32,1),background .3s,box-shadow .3s}
+nav.scrolled{background:rgba(255,255,255,.93);backdrop-filter:blur(20px);box-shadow:0 1px 0 var(--border)}
+nav.hidden{transform:translateY(-100%)}
+.nav-logo{display:flex;align-items:center;gap:8px;cursor:none;text-decoration:none}
+.logo-m{width:30px;height:30px;border-radius:8px;background:var(--grad);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:900;color:#fff;letter-spacing:-.5px;transition:transform .3s}
+.nav-logo:hover .logo-m{transform:rotate(-5deg) scale(1.08)}
+.logo-t{font-size:15px;font-weight:800;color:var(--dark)}
+.nav-links{display:flex;gap:2px}
+.nav-links a{padding:6px 13px;font-size:13px;font-weight:500;color:var(--mid);text-decoration:none;border-radius:100px;cursor:none;transition:all .2s}
+.nav-links a:hover{color:var(--dark);background:#f4f4f4}
+.nav-r{display:flex;align-items:center;gap:8px}
+.btn-ghost{background:none;border:none;font-size:13px;font-weight:600;color:var(--mid);cursor:none;padding:7px 13px;font-family:'Inter',sans-serif;transition:color .2s}
+.btn-ghost:hover{color:var(--dark)}
+.btn-pill{background:var(--dark);color:#fff;border:none;cursor:none;padding:8px 18px;border-radius:100px;font-size:13px;font-weight:700;font-family:'Inter',sans-serif;transition:all .25s;position:relative;overflow:hidden}
+.btn-pill::after{content:'';position:absolute;inset:0;background:var(--grad);opacity:0;transition:opacity .3s}
+.btn-pill:hover::after{opacity:1}
+.btn-pill span{position:relative;z-index:1}
+.page{display:none;min-height:100vh}
+.page.active{display:block}
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:100px 24px 80px;position:relative;overflow:hidden}
+.h-orb{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none;animation:orb 10s ease-in-out infinite}
+.o1{width:500px;height:500px;background:rgba(32,64,127,.06);top:-150px;left:-150px}
+.o2{width:400px;height:400px;background:rgba(139,47,201,.05);bottom:-100px;right:-100px;animation-delay:-4s}
+.o3{width:300px;height:300px;background:rgba(221,75,11,.04);top:50%;left:60%;animation-delay:-7s}
+@keyframes orb{0%,100%{transform:translate(0,0)}33%{transform:translate(20px,-20px)}66%{transform:translate(-15px,15px)}}
+.h-grid{position:absolute;inset:0;opacity:.015;background-image:linear-gradient(var(--blue) 1px,transparent 1px),linear-gradient(90deg,var(--blue) 1px,transparent 1px);background-size:48px 48px}
+.h-cnt{position:relative;z-index:1;max-width:780px}
+.h-badge{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--border);padding:7px 16px;border-radius:100px;font-size:12px;font-weight:600;color:var(--mid);margin-bottom:28px;box-shadow:0 2px 12px rgba(0,0,0,.06);animation:fup .7s .1s both}
+.live{width:7px;height:7px;border-radius:50%;background:#22c55e;animation:livep 1.5s ease-in-out infinite}
+@keyframes livep{0%,100%{box-shadow:0 0 0 0 rgba(34,197,94,.4)}50%{box-shadow:0 0 0 5px rgba(34,197,94,0)}}
+.hero h1{font-size:clamp(36px,5.5vw,68px);font-weight:800;line-height:1.06;letter-spacing:-2.5px;color:var(--dark);margin-bottom:20px;animation:fup .8s .2s both}
+.gt{background:linear-gradient(135deg,#20407F,#8B2FC9,#DD4B0B);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.h-sub{font-size:17px;font-weight:400;line-height:1.65;color:var(--mid);max-width:540px;margin:0 auto 36px;animation:fup .8s .3s both}
+.h-inp{display:flex;max-width:440px;margin:0 auto 24px;background:#fff;border:1.5px solid var(--border);border-radius:100px;padding:5px 5px 5px 22px;box-shadow:0 4px 20px rgba(0,0,0,.07);animation:fup .8s .4s both;transition:border-color .2s,box-shadow .2s}
+.h-inp:focus-within{border-color:var(--blue);box-shadow:0 0 0 4px rgba(32,64,127,.08),0 4px 20px rgba(0,0,0,.07)}
+.h-inp input{flex:1;border:none;outline:none;font-size:14px;font-family:'Inter',sans-serif;background:transparent;color:var(--dark)}
+.h-inp input::placeholder{color:#bbb}
+.btn-hero{background:var(--dark);color:#fff;border:none;cursor:none;padding:10px 22px;border-radius:100px;font-size:13px;font-weight:700;font-family:'Inter',sans-serif;white-space:nowrap;transition:all .25s;position:relative;overflow:hidden}
+.btn-hero::before{content:'';position:absolute;inset:0;background:var(--grad);opacity:0;transition:opacity .3s}
+.btn-hero:hover::before{opacity:1}
+.btn-hero span{position:relative;z-index:1}
+.h-av{display:flex;align-items:center;justify-content:center;gap:10px;animation:fup .8s .5s both}
+.avs{display:flex}
+.av{width:28px;height:28px;border-radius:50%;border:2px solid #fff;margin-left:-8px;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.av:first-child{margin-left:0}
+.av1{background:linear-gradient(135deg,var(--blue),var(--blue-m));color:#fff}
+.av2{background:linear-gradient(135deg,var(--orange),#f07a3a);color:#fff}
+.av3{background:linear-gradient(135deg,var(--purple),#b060e8);color:#fff}
+.av4{background:linear-gradient(135deg,#15803d,#4ade80);color:#fff}
+.h-av p{font-size:13px;color:var(--light)}
+.h-av strong{color:var(--dark)}
+.h-pills{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:40px;animation:fup .8s .6s both}
+.hpill{display:flex;align-items:center;gap:6px;background:#fff;border:1px solid var(--border);padding:7px 14px;border-radius:100px;font-size:12px;font-weight:600;color:var(--mid);box-shadow:0 1px 4px rgba(0,0,0,.04);cursor:none;transition:all .25s}
+.hpill:hover{border-color:var(--purple);color:var(--purple);transform:translateY(-2px);box-shadow:0 4px 14px rgba(139,47,201,.12)}
+.sh{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:5px;animation:fup 1s 1s both}
+.sl{width:1px;height:36px;background:linear-gradient(to bottom,transparent,var(--blue));animation:sline 1.6s ease-in-out infinite}
+@keyframes sline{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+.sh span{font-size:9px;color:var(--light);letter-spacing:1.5px;text-transform:uppercase}
+.mq-wrap{background:var(--grad);overflow:hidden}
+.mq-inner{display:flex;width:max-content;animation:mq 22s linear infinite}
+@keyframes mq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.mqp{display:flex;align-items:center;gap:10px;padding:16px 36px;border-right:1px solid rgba(255,255,255,.15);white-space:nowrap}
+.mqp .mn{font-size:20px;font-weight:800;color:#fff}
+.mqp .ml{font-size:11px;color:rgba(255,255,255,.6);font-weight:500}
+.sec{padding:100px 48px;max-width:1200px;margin:0 auto}
+.sec-full{padding:100px 0}
+.sec-in{max-width:1200px;margin:0 auto;padding:0 48px}
+.ey{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px}
+.ey-b{color:var(--blue)}.ey-o{color:var(--orange)}.ey-p{color:var(--purple)}
+h2.st{font-size:clamp(32px,3.8vw,48px);font-weight:800;letter-spacing:-1.5px;line-height:1.1;color:var(--dark);margin-bottom:14px}
+.sub{font-size:16px;font-weight:400;color:var(--mid);line-height:1.7;max-width:500px}
+.prob-wrap{background:linear-gradient(160deg,#0d1a35 0%,#1a1040 50%,#2a0d0d 100%)}
+.prob-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,.06);border-radius:20px;overflow:hidden;margin-top:56px}
+.prob-card{background:#0f172a;padding:36px;position:relative;overflow:hidden;transition:background .3s}
+.prob-card:hover{background:#131f35}
+.prob-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--grad);transform:scaleX(0);transform-origin:left;transition:transform .45s cubic-bezier(.23,1,.32,1)}
+.prob-card:hover::before{transform:scaleX(1)}
+.prob-n{font-size:64px;font-weight:900;color:rgba(255,255,255,.03);position:absolute;top:12px;right:16px}
+.prob-icon{font-size:26px;margin-bottom:16px}
+.prob-card h3{font-size:18px;font-weight:700;color:#fff;margin-bottom:10px}
+.prob-card p{font-size:14px;color:rgba(255,255,255,.4);line-height:1.7;font-weight:400}
+.feat-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:56px}
+.fc{background:#fff;border:1px solid var(--border);border-radius:20px;padding:32px;cursor:none;position:relative;overflow:hidden;transition:transform .3s cubic-bezier(.23,1,.32,1),box-shadow .3s,border-color .3s}
+.fc::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--grad);transform:scaleX(0);transition:transform .4s cubic-bezier(.23,1,.32,1)}
+.fc:hover{transform:translateY(-5px);box-shadow:0 16px 40px rgba(0,0,0,.08);border-color:transparent}
+.fc:hover::after{transform:scaleX(1)}
+.fc.wide{grid-column:span 2;display:grid;grid-template-columns:1fr 1fr;gap:36px;align-items:center}
+.fi{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:18px;transition:transform .3s}
+.fc:hover .fi{transform:scale(1.12) rotate(-4deg)}
+.fi-b{background:var(--blue-l)}.fi-o{background:var(--orange-l)}.fi-p{background:var(--purple-l)}
+.fc h3{font-size:20px;font-weight:700;letter-spacing:-.4px;color:var(--dark);margin-bottom:8px}
+.fc p{font-size:14px;color:var(--mid);line-height:1.7;font-weight:400;margin-bottom:18px}
+.fc-lnk{font-size:13px;font-weight:700;color:var(--blue);display:inline-flex;align-items:center;gap:5px;cursor:none;transition:gap .2s}
+.fc:hover .fc-lnk{gap:9px}
+.arr{transition:transform .2s}
+.fc:hover .arr{transform:translateX(3px)}
+.mini-rm{background:var(--blue-l);border-radius:14px;padding:22px}
+.mini-rm-lbl{font-size:10px;font-weight:700;color:var(--blue);letter-spacing:1px;text-transform:uppercase;margin-bottom:12px}
+.mrr{display:flex;align-items:center;gap:9px;padding:9px 12px;background:#fff;border-radius:9px;margin-bottom:6px;border:1px solid var(--border);font-size:11px;transition:transform .2s}
+.mrr:hover{transform:translateX(3px)}
+.md{width:18px;height:18px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700}
+.md-ok{background:var(--green-bg);color:var(--green)}.md-cur{background:var(--orange-l);color:var(--orange)}.md-todo{background:#f4f4f4;color:var(--light)}
+.mi{flex:1}.mi b{display:block;font-size:11px;font-weight:700;color:var(--dark)}.mi span{font-size:10px;color:var(--light)}
+.rt{font-size:9px;font-weight:700;padding:2px 7px;border-radius:100px}
+.rf{background:var(--blue-l);color:var(--blue)}.rp{background:var(--green-bg);color:var(--green)}.rm{background:var(--orange-l);color:var(--orange)}
+.timeline-wrap{position:relative;margin-top:48px}
+.timeline-wrap::before{content:'';position:absolute;left:28px;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,var(--blue),var(--purple),var(--orange));border-radius:2px;opacity:.2}
+.tl-item{display:flex;gap:20px;margin-bottom:0;position:relative;align-items:stretch}
+.tl-item:last-child .tl-right{border-bottom:none;padding-bottom:0}
+.tl-left{display:flex;flex-direction:column;align-items:center;flex-shrink:0;width:58px}
+.tl-node{width:58px;height:58px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;border:2px solid;position:relative;z-index:1;background:#fff;transition:all .3s;flex-shrink:0}
+.tl-node.done{background:var(--green-bg);border-color:var(--green);color:var(--green)}
+.tl-node.current{background:var(--orange-l);border-color:var(--orange);color:var(--orange);box-shadow:0 0 0 4px rgba(221,75,11,.12)}
+.tl-node.todo{background:#f8f8f8;border-color:var(--border);color:var(--light)}
+.tl-right{flex:1;padding:10px 0 28px 4px;border-bottom:1px solid var(--border)}
+.tl-header{display:flex;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap}
+.tl-title{font-size:15px;font-weight:700;color:var(--dark)}
+.tl-tag{font-size:9px;font-weight:700;padding:3px 9px;border-radius:100px;white-space:nowrap}
+.tl-tag.fed{background:var(--blue-l);color:var(--blue)}
+.tl-tag.prov{background:var(--green-bg);color:var(--green)}
+.tl-tag.mun{background:var(--orange-l);color:var(--orange)}
+.tl-meta{display:flex;gap:16px;margin-bottom:8px;flex-wrap:wrap}
+.tl-meta span{font-size:12px;color:var(--mid);display:flex;align-items:center;gap:4px}
+.tl-meta strong{color:var(--dark);font-weight:700}
+.tl-link{font-size:12px;color:var(--blue);font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:4px;cursor:none;transition:gap .2s}
+.tl-link:hover{gap:7px}
+.tl-status{font-size:11px;font-weight:700;padding:4px 10px;border-radius:100px;white-space:nowrap;align-self:flex-start;margin-top:2px}
+.st-done{background:var(--green-bg);color:var(--green)}
+.st-cur{background:var(--orange-l);color:var(--orange)}
+.st-todo{background:#f4f4f4;color:var(--light)}
+.sf-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:48px}
+.sf{background:#fff;border:1px solid var(--border);border-radius:18px;padding:28px;cursor:none;transition:all .3s;position:relative;overflow:hidden}
+.sf::before{content:'';position:absolute;inset:0;background:var(--grad-soft);opacity:0;transition:opacity .3s}
+.sf:hover{transform:translateY(-5px);box-shadow:0 14px 36px rgba(0,0,0,.07);border-color:transparent}
+.sf:hover::before{opacity:1}
+.sf>*{position:relative;z-index:1}
+.sf h3{font-size:17px;font-weight:700;letter-spacing:-.3px;color:var(--dark);margin-bottom:8px}
+.sf p{font-size:13px;color:var(--mid);line-height:1.6;margin-bottom:18px}
+.sfb{display:inline-flex;align-items:center;gap:6px;background:var(--dark);color:#fff;border:none;cursor:none;padding:9px 18px;border-radius:100px;font-size:12px;font-weight:700;font-family:'Inter',sans-serif;transition:all .25s;position:relative;overflow:hidden}
+.sfb::before{content:'';position:absolute;inset:0;background:var(--grad);opacity:0;transition:opacity .3s}
+.sfb:hover::before{opacity:1}
+.sfb span{position:relative;z-index:1}
+.sa{position:relative;z-index:1;transition:transform .2s}
+.sfb:hover .sa{transform:translateX(3px)}
+.how-bg{background:#fafafa}
+.steps{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-top:52px;position:relative}
+.steps::before{content:'';position:absolute;top:34px;left:10%;right:10%;height:1px;background:linear-gradient(90deg,rgba(32,64,127,.15),rgba(139,47,201,.15),rgba(221,75,11,.15))}
+.step{text-align:center;position:relative;z-index:1;background:#fff;border:1px solid var(--border);border-radius:16px;padding:24px 14px;transition:all .3s;cursor:none}
+.step:hover{transform:translateY(-4px);box-shadow:0 10px 28px rgba(0,0,0,.06)}
+.sn{width:48px;height:48px;border-radius:50%;background:#fff;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:var(--blue);margin:0 auto 14px;transition:all .3s}
+.step:hover .sn{background:var(--grad);color:#fff;border-color:transparent}
+.step h4{font-size:13px;font-weight:700;color:var(--dark);margin-bottom:6px}
+.step p{font-size:12px;color:var(--light);line-height:1.6;font-weight:400}
+.ind-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:48px}
+.ind{background:#fff;border:1px solid var(--border);border-radius:16px;padding:22px 18px;cursor:none;text-align:center;transition:all .3s;position:relative;overflow:hidden}
+.ind::before{content:'';position:absolute;inset:0;background:var(--grad-soft);opacity:0;transition:opacity .3s}
+.ind:hover{transform:translateY(-5px);box-shadow:0 12px 28px rgba(0,0,0,.07);border-color:transparent}
+.ind:hover::before{opacity:1}
+.ind>*{position:relative;z-index:1}
+.ie{font-size:26px;margin-bottom:8px;display:block;transition:transform .3s}
+.ind:hover .ie{transform:scale(1.18) rotate(-5deg)}
+.ind h4{font-size:13px;font-weight:700;color:var(--dark);margin-bottom:3px}
+.ind span{font-size:11px;color:var(--light)}
+.cases-wrap{background:linear-gradient(135deg,#0f1c3f 0%,#1a0a35 50%,#2d1000 100%)}
+.cases-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:52px}
+.cc{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:20px;overflow:hidden;cursor:none;transition:all .3s}
+.cc:hover{background:rgba(255,255,255,.09);transform:translateY(-5px);border-color:rgba(255,255,255,.15)}
+.cc-top{padding:24px 24px 18px}
+.cc-tag{font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:10px;display:block}
+.cc h3{font-size:22px;font-weight:800;letter-spacing:-.5px;color:#fff;margin-bottom:4px}
+.cc-city{font-size:12px;color:rgba(255,255,255,.35)}
+.cc-mid{padding:16px 24px;border-top:1px solid rgba(255,255,255,.07);border-bottom:1px solid rgba(255,255,255,.07)}
+.cc-quote{font-size:14px;color:rgba(255,255,255,.55);line-height:1.65;font-style:italic}
+.cc-bot{padding:18px 24px;display:flex;flex-direction:column;gap:5px}
+.cc-r{display:flex;align-items:center;gap:7px;font-size:12px;color:rgba(255,255,255,.5)}
+.cc-r::before{content:'✓';color:#4ade80;font-weight:700;font-size:10px}
+.cc-r b{color:#fff}
+.btn-cc{margin-top:10px;background:none;border:1px solid rgba(255,255,255,.18);color:#fff;padding:8px 16px;border-radius:100px;font-size:12px;font-weight:700;font-family:'Inter',sans-serif;cursor:none;transition:all .25s;align-self:flex-start}
+.btn-cc:hover{background:#fff;color:var(--blue)}
+.test-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:48px}
+.tc{background:#fff;border:1px solid var(--border);border-radius:18px;padding:28px;transition:all .3s;cursor:none}
+.tc:hover{transform:translateY(-4px);box-shadow:0 10px 28px rgba(0,0,0,.05)}
+.tc-stars{font-size:13px;letter-spacing:2px;margin-bottom:14px}
+.tc p{font-size:15px;font-weight:400;color:var(--dark);line-height:1.65;margin-bottom:18px}
+.tc-au strong{font-size:13px;font-weight:700;color:var(--dark);display:block}
+.tc-au span{font-size:12px;color:var(--light)}
+.price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:48px}
+.pc{background:#fff;border:1.5px solid var(--border);border-radius:22px;padding:32px;position:relative;transition:all .3s;cursor:none}
+.pc:hover{transform:translateY(-5px);box-shadow:0 16px 40px rgba(0,0,0,.07)}
+.pc.feat{background:var(--dark);border-color:var(--dark)}
+.feat-badge{position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:var(--grad);color:#fff;font-size:10px;font-weight:700;padding:3px 14px;border-radius:100px;white-space:nowrap}
+.pc-name{font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--light);margin-bottom:6px}
+.pc.feat .pc-name{color:rgba(255,255,255,.4)}
+.pc-price{display:flex;align-items:baseline;gap:3px;margin-bottom:6px}
+.pc-big{font-size:48px;font-weight:800;letter-spacing:-2px;color:var(--dark)}
+.pc.feat .pc-big{color:#fff}
+.pc-per{font-size:14px;color:var(--light)}
+.pc.feat .pc-per{color:rgba(255,255,255,.4)}
+.pc-desc{font-size:13px;color:var(--light);margin-bottom:22px;padding-bottom:22px;border-bottom:1px solid var(--border);font-weight:400}
+.pc.feat .pc-desc{color:rgba(255,255,255,.4);border-bottom-color:rgba(255,255,255,.1)}
+.pc-feats{list-style:none;display:flex;flex-direction:column;gap:9px;margin-bottom:24px}
+.pc-feats li{font-size:13px;color:var(--dark);display:flex;align-items:center;gap:8px;font-weight:400}
+.pc-feats li::before{content:'✓';color:var(--blue);font-weight:700;flex-shrink:0}
+.pc.feat .pc-feats li{color:rgba(255,255,255,.75)}
+.pc.feat .pc-feats li::before{color:#4ade80}
+.btn-pc{width:100%;padding:12px;border-radius:100px;font-size:13px;font-weight:700;cursor:none;font-family:'Inter',sans-serif;transition:all .25s;border:1.5px solid var(--border);background:#fff;color:var(--dark)}
+.btn-pc:hover{border-color:var(--blue);color:var(--blue)}
+.btn-pc.pf{background:#fff;color:var(--dark);border:none}
+.btn-pc.pf:hover{background:rgba(255,255,255,.85)}
+.cta-sec{background:linear-gradient(135deg,#0f1c3f,#2d0f40,#3d1200);padding:120px 48px;text-align:center;position:relative;overflow:hidden}
+.cta-sec::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 60% at 30% 50%,rgba(32,64,127,.3) 0%,transparent 60%),radial-gradient(ellipse 50% 50% at 70% 50%,rgba(221,75,11,.18) 0%,transparent 60%)}
+.cta-sec h2{font-size:clamp(36px,5vw,60px);font-weight:800;letter-spacing:-2px;color:#fff;margin-bottom:14px;position:relative;z-index:1;line-height:1.08}
+.cta-sec p{font-size:17px;color:rgba(255,255,255,.5);margin-bottom:36px;position:relative;z-index:1;font-weight:400}
+.cta-btns{display:flex;justify-content:center;gap:10px;margin-bottom:24px;position:relative;z-index:1;flex-wrap:wrap}
+.btn-cw{background:#fff;color:var(--dark);border:none;cursor:none;padding:13px 26px;border-radius:100px;font-size:14px;font-weight:700;font-family:'Inter',sans-serif;transition:all .25s}
+.btn-cw:hover{background:var(--orange);color:#fff;transform:translateY(-2px)}
+.btn-co{background:transparent;color:rgba(255,255,255,.65);border:1.5px solid rgba(255,255,255,.15);cursor:none;padding:13px 26px;border-radius:100px;font-size:14px;font-weight:600;font-family:'Inter',sans-serif;transition:all .25s}
+.btn-co:hover{border-color:rgba(255,255,255,.4);color:#fff}
+.cta-trust{display:flex;justify-content:center;gap:22px;flex-wrap:wrap;position:relative;z-index:1}
+.cta-trust span{font-size:12px;color:rgba(255,255,255,.3);display:flex;align-items:center;gap:5px}
+.cta-trust span::before{content:'✓';color:var(--orange);font-weight:700}
+.ai-sidebar{position:fixed;right:24px;bottom:24px;width:320px;height:500px;background:#fff;border:1px solid var(--border);border-radius:16px;box-shadow:0 10px 40px rgba(0,0,0,.12);display:flex;flex-direction:column;z-index:100;transition:all .3s}
+.ai-sidebar.hidden{transform:translateY(600px);opacity:0;pointer-events:none}
+.ai-sidebar-head{padding:16px;border-bottom:1px solid var(--border);background:linear-gradient(135deg,rgba(32,64,127,.05),rgba(139,47,201,.05));border-radius:16px 16px 0 0}
+.ai-sidebar-head h3{font-size:14px;font-weight:700;color:var(--dark);margin-bottom:2px}
+.ai-sidebar-head p{font-size:11px;color:var(--light)}
+.ai-sidebar-msgs{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px}
+.ai-msg{display:flex;gap:8px;font-size:12px;line-height:1.5}
+.ai-msg.user{justify-content:flex-end}
+.ai-msg.user .txt{background:var(--dark);color:#fff;padding:8px 12px;border-radius:10px;border-radius:10px 2px 10px 10px}
+.ai-msg.ai .txt{background:var(--blue-l);color:var(--dark);padding:8px 12px;border-radius:10px;border-radius:2px 10px 10px 10px}
+.ai-msg.loading .txt{background:var(--blue-l);color:var(--dark);padding:8px 12px;border-radius:10px}
+.ai-dots{display:flex;gap:4px}
+.ai-dots span{width:4px;height:4px;background:var(--blue);border-radius:50%;animation:bounce .6s infinite}
+.ai-dots span:nth-child(2){animation-delay:.2s}
+.ai-dots span:nth-child(3){animation-delay:.4s}
+@keyframes bounce{0%,100%{opacity:.4;transform:translateY(0)}50%{opacity:1;transform:translateY(-4px)}}
+.ai-sidebar-input{padding:12px;border-top:1px solid var(--border);display:flex;gap:8px}
+.ai-sidebar-input input{flex:1;border:1px solid var(--border);border-radius:8px;padding:8px 12px;font-size:12px;font-family:'Inter',sans-serif;outline:none}
+.ai-sidebar-input input:focus{border-color:var(--blue);box-shadow:0 0 0 2px rgba(32,64,127,.08)}
+.ai-sidebar-input button{padding:8px 12px;background:var(--blue);color:#fff;border:none;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;transition:background .2s}
+.ai-sidebar-input button:hover{background:var(--dark)}
+.ai-toggle{position:fixed;right:24px;bottom:24px;width:50px;height:50px;border-radius:50%;background:var(--grad);color:#fff;border:none;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(0,0,0,.15);transition:all .3s;z-index:99}
+.ai-toggle:hover{transform:scale(1.1);box-shadow:0 6px 16px rgba(0,0,0,.2)}
+.ai-toggle.hidden{display:none}
+footer{background:#0a0a0a;padding:64px 48px 28px}
+.ft{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;gap:44px;margin-bottom:44px}
+.ft-logo{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.ft-lm{width:28px;height:28px;border-radius:7px;background:var(--grad);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:900;color:#fff}
+.ft-lt{font-size:15px;font-weight:800;color:#fff}
+.ft-brand p{font-size:13px;color:rgba(255,255,255,.25);line-height:1.65;max-width:210px;font-weight:400}
+.ft-col h5{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:14px}
+.ft-col a{display:block;font-size:13px;color:rgba(255,255,255,.3);text-decoration:none;margin-bottom:8px;cursor:none;transition:color .2s;font-weight:400}
+.ft-col a:hover{color:#fff}
+.ft-bot{border-top:1px solid rgba(255,255,255,.06);padding-top:20px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.ft-bot p{font-size:12px;color:rgba(255,255,255,.2);font-weight:400}
+.ft-disc{font-size:11px;color:rgba(255,255,255,.12);max-width:440px;text-align:right;line-height:1.5}
+#page-funding{background:#fff}
+.fund-hero{background:linear-gradient(135deg,#0f1c3f,#2d0f40);padding:120px 48px 80px;text-align:center;position:relative;overflow:hidden}
+.fund-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 60% at 50% 0%,rgba(139,47,201,.25) 0%,transparent 60%)}
+.fund-hero h1{font-size:clamp(36px,5vw,60px);font-weight:800;letter-spacing:-2px;color:#fff;margin-bottom:14px;position:relative;z-index:1}
+.fund-hero p{font-size:18px;color:rgba(255,255,255,.55);max-width:540px;margin:0 auto 36px;position:relative;z-index:1;line-height:1.6}
+.fund-hero-stats{display:flex;justify-content:center;gap:48px;position:relative;z-index:1;flex-wrap:wrap}
+.fhs{text-align:center}
+.fhs-n{font-size:36px;font-weight:800;color:#fff;letter-spacing:-1.5px}
+.fhs-l{font-size:13px;color:rgba(255,255,255,.4);margin-top:2px}
+.fund-filter{background:#fff;border-bottom:1px solid var(--border);padding:20px 48px;display:flex;gap:10px;align-items:center;position:sticky;top:60px;z-index:100;overflow-x:auto}
+.ff-pill{padding:8px 18px;border-radius:100px;font-size:13px;font-weight:600;border:1.5px solid var(--border);background:#fff;color:var(--mid);cursor:none;transition:all .2s;white-space:nowrap;font-family:'Inter',sans-serif}
+.ff-pill:hover,.ff-pill.active{border-color:var(--blue);color:var(--blue);background:var(--blue-l)}
+.fund-grid-wrap{max-width:1200px;margin:0 auto;padding:60px 48px}
+.fund-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.grant-card{background:#fff;border:1px solid var(--border);border-radius:18px;overflow:hidden;transition:all .3s;cursor:none}
+.grant-card:hover{transform:translateY(-4px);box-shadow:0 14px 36px rgba(0,0,0,.08);border-color:transparent}
+.gc-top{padding:22px 22px 16px;border-bottom:1px solid var(--border)}
+.gc-badges{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
+.gc-badge{font-size:9px;font-weight:700;padding:3px 9px;border-radius:100px;letter-spacing:.4px}
+.gc-amount{font-size:28px;font-weight:800;letter-spacing:-1px;color:var(--dark);margin-bottom:4px}
+.gc-name{font-size:15px;font-weight:700;color:var(--dark);margin-bottom:6px}
+.gc-desc{font-size:13px;color:var(--mid);line-height:1.6}
+.gc-mid{padding:16px 22px;border-bottom:1px solid var(--border)}
+.gc-row{display:flex;justify-content:space-between;font-size:12px;margin-bottom:6px}
+.gc-row:last-child{margin-bottom:0}
+.gc-row span{color:var(--light)}
+.gc-row strong{color:var(--dark);font-weight:700}
+.gc-bot{padding:16px 22px;display:flex;gap:8px}
+.btn-gc-apply{flex:1;padding:10px;background:var(--dark);color:#fff;border:none;border-radius:100px;font-size:12px;font-weight:700;cursor:none;font-family:'Inter',sans-serif;transition:all .25s;position:relative;overflow:hidden;text-align:center}
+.btn-gc-apply::before{content:'';position:absolute;inset:0;background:var(--grad);opacity:0;transition:opacity .3s}
+.btn-gc-apply:hover::before{opacity:1}
+.btn-gc-apply span{position:relative;z-index:1}
+.btn-gc-info{padding:10px 16px;background:#fff;color:var(--blue);border:1.5px solid var(--blue-l);border-radius:100px;font-size:12px;font-weight:700;cursor:none;font-family:'Inter',sans-serif;transition:all .25s}
+.btn-gc-info:hover{background:var(--blue-l)}
+.match-bar{height:4px;background:#f0f0f0;border-radius:100px;margin-top:8px;overflow:hidden}
+.match-fill{height:100%;background:var(--grad);border-radius:100px}
+#page-eligibility{background:#f7f8fa}
+.elig-wrap{max-width:700px;margin:0 auto;padding:80px 24px 60px}
+.elig-wrap h1{font-size:32px;font-weight:800;letter-spacing:-.8px;color:var(--dark);margin-bottom:8px}
+.elig-wrap>p{font-size:15px;color:var(--mid);margin-bottom:36px}
+.elig-card{background:#fff;border:1px solid var(--border);border-radius:16px;padding:28px;margin-bottom:16px}
+.elig-card h3{font-size:16px;font-weight:700;color:var(--dark);margin-bottom:16px}
+.elig-q{margin-bottom:16px}
+.elig-q label{display:block;font-size:13px;font-weight:600;color:var(--dark);margin-bottom:8px}
+.elig-q select,.elig-q input{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;font-family:'Inter',sans-serif;background:#fff;color:var(--dark);outline:none;transition:border-color .2s;appearance:none}
+.elig-q select:focus,.elig-q input:focus{border-color:var(--blue)}
+.elig-checks-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.elig-ck{display:flex;align-items:center;gap:9px;padding:11px 13px;background:#fff;border:1.5px solid var(--border);border-radius:10px;cursor:none;font-size:13px;font-weight:500;color:var(--dark);transition:all .2s}
+.elig-ck:hover{border-color:var(--purple)}
+.elig-ck.sel{border-color:var(--purple);background:var(--purple-l)}
+.elig-results{background:var(--dark);border-radius:16px;padding:24px;margin-top:24px;display:none}
+.elig-results.show{display:block}
+.elig-results h3{color:#fff;font-size:18px;font-weight:700;margin-bottom:6px}
+.elig-results p{color:rgba(255,255,255,.55);font-size:14px;margin-bottom:16px}
+.er-total{font-size:40px;font-weight:800;color:#fff;letter-spacing:-1.5px;margin-bottom:4px}
+.er-item{display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(255,255,255,.06);border-radius:9px;margin-bottom:7px}
+.er-item-name{flex:1;font-size:13px;font-weight:600;color:#fff}
+.er-item-amt{font-size:14px;font-weight:800;color:#4ade80}
+.btn-check{width:100%;padding:14px;background:var(--dark);color:#fff;border:none;border-radius:100px;font-size:14px;font-weight:700;cursor:none;font-family:'Inter',sans-serif;transition:all .25s;position:relative;overflow:hidden;margin-top:8px}
+.btn-check::before{content:'';position:absolute;inset:0;background:var(--grad);opacity:0;transition:opacity .3s}
+.btn-check:hover::before{opacity:1}
+.btn-check span{position:relative;z-index:1}
+#page-ob{background:#fff}
+.ob-wrap{max-width:580px;margin:0 auto;padding:80px 24px 60px}
+.ob-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.ob-top p{font-size:12px;font-weight:600;color:var(--light)}
+.ob-top button{font-size:13px;color:var(--light);background:none;border:none;cursor:none;font-family:'Inter',sans-serif;font-weight:500}
+.ob-bar{height:3px;background:#f0f0f0;border-radius:100px;margin-bottom:48px;overflow:hidden}
+.ob-prog{height:100%;border-radius:100px;background:var(--grad);transition:width .5s cubic-bezier(.23,1,.32,1)}
+.ob-step{display:none;animation:fup .45s cubic-bezier(.23,1,.32,1) both}
+.ob-step.active{display:block}
+.ob-step h2{font-size:30px;font-weight:800;letter-spacing:-.8px;color:var(--dark);margin-bottom:6px}
+.ob-step .ob-sub{font-size:15px;color:var(--mid);margin-bottom:32px;font-weight:400}
+.ob-tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:28px}
+.ob-t{background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:18px 12px;cursor:none;text-align:center;transition:all .2s}
+.ob-t:hover{border-color:var(--blue);transform:translateY(-2px);box-shadow:0 5px 16px rgba(32,64,127,.1)}
+.ob-t.sel{border-color:var(--blue);background:var(--blue-l)}
+.ob-t .oti{font-size:24px;margin-bottom:6px;display:block}
+.ob-t h4{font-size:12px;font-weight:700;color:var(--dark)}
+.ob-rows{display:flex;flex-direction:column;gap:8px;margin-bottom:28px}
+.ob-r{background:#fff;border:1.5px solid var(--border);border-radius:12px;padding:15px 18px;cursor:none;display:flex;align-items:center;gap:12px;transition:all .2s}
+.ob-r:hover{border-color:var(--blue);transform:translateX(3px)}
+.ob-r.sel{border-color:var(--blue);background:var(--blue-l)}
+.ob-r .ri{font-size:20px}
+.ob-r h4{font-size:14px;font-weight:700;color:var(--dark);margin-bottom:1px}
+.ob-r p{font-size:12px;color:var(--light);font-weight:400}
+.ob-fg{margin-bottom:14px}
+.ob-fg label{display:block;font-size:12px;font-weight:700;color:var(--dark);margin-bottom:6px}
+.ob-fg select,.ob-fg input{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:12px;font-size:14px;font-family:'Inter',sans-serif;background:#fff;color:var(--dark);outline:none;transition:border-color .2s,box-shadow .2s;appearance:none}
+.ob-fg select:focus,.ob-fg input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(32,64,127,.08)}
+.ob-checks{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:28px}
+.ob-ck{display:flex;align-items:center;gap:9px;padding:11px 13px;background:#fff;border:1.5px solid var(--border);border-radius:10px;cursor:none;font-size:13px;font-weight:500;color:var(--dark);transition:all .2s}
+.ob-ck:hover{border-color:var(--purple)}
+.ob-ck.sel{border-color:var(--purple);background:var(--purple-l)}
+.ob-nav{display:flex;gap:8px}
+.btn-ob-b{background:#fff;border:1.5px solid var(--border);color:var(--mid);padding:12px 20px;border-radius:100px;font-size:13px;font-weight:700;cursor:none;font-family:'Inter',sans-serif;transition:all .2s}
+.btn-ob-b:hover{border-color:var(--dark);color:var(--dark)}
+.btn-ob-n{flex:1;background:var(--dark);color:#fff;border:none;padding:12px 24px;border-radius:100px;font-size:13px;font-weight:700;cursor:none;font-family:'Inter',sans-serif;transition:all .25s;position:relative;overflow:hidden}
+.btn-ob-n::before{content:'';position:absolute;inset:0;background:var(--grad);opacity:0;transition:opacity .3s}
+.btn-ob-n:hover::before{opacity:1}
+.btn-ob-n>span{position:relative;z-index:1}
+#page-db{background:#f7f8fa}
+.db-layout{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 60px)}
+.db-side{background:#fff;border-right:1px solid var(--border);padding:20px 14px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto}
+.db-biz{padding:12px;background:var(--blue-l);border-radius:11px;margin-bottom:18px}
+.db-biz h4{font-size:13px;font-weight:700;color:var(--blue)}
+.db-biz p{font-size:11px;color:var(--mid);margin-top:2px}
+.db-health{margin-top:9px}
+.db-hp{font-size:10px;font-weight:600;color:var(--mid);display:flex;justify-content:space-between;margin-bottom:4px}
+.db-hp span{color:var(--blue);font-weight:700}
+.db-ht{height:4px;background:var(--border);border-radius:100px;overflow:hidden}
+.db-hf{height:100%;background:var(--grad);border-radius:100px}
+.db-nav{display:flex;flex-direction:column;gap:2px;margin-bottom:18px}
+.dblk{display:flex;align-items:center;gap:8px;padding:8px 11px;border-radius:9px;font-size:13px;font-weight:500;color:var(--mid);cursor:none;text-decoration:none;transition:all .2s}
+.dblk:hover{background:#f4f4f4;color:var(--dark)}
+.dblk.active{background:var(--blue-l);color:var(--blue);font-weight:700}
+.dblk .ico{font-size:14px;width:17px;text-align:center}
+.db-dl h5{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--light);margin-bottom:9px}
+.dli{padding:8px 10px;border-radius:8px;margin-bottom:5px}
+.dli.am{background:var(--amber-bg)}.dli.gn{background:var(--green-bg)}
+.dli p{font-size:11px;font-weight:700;color:var(--dark)}
+.dli span{font-size:10px;color:var(--mid)}
+.db-main{padding:24px}
+.dbw h2{font-size:26px;font-weight:800;letter-spacing:-.6px;color:var(--dark);margin-bottom:3px}
+.dbw p{font-size:14px;color:var(--mid);margin-bottom:20px;font-weight:400}
+.db-alert{background:#fff;border:1px solid var(--border);border-left:3px solid var(--orange);border-radius:13px;padding:14px 18px;margin-bottom:18px;display:flex;align-items:center;gap:12px}
+.db-alert .ai{font-size:20px}
+.db-alert h4{font-size:13px;font-weight:700;color:var(--dark)}
+.db-alert p{font-size:12px;color:var(--mid);font-weight:400}
+.btn-dal{margin-left:auto;background:var(--blue);color:#fff;border:none;padding:7px 14px;border-radius:100px;font-size:12px;font-weight:700;cursor:none;font-family:'Inter',sans-serif;white-space:nowrap;transition:all .2s}
+.btn-dal:hover{background:var(--orange)}
+.db-panels{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.dp{background:#fff;border:1px solid var(--border);border-radius:16px;padding:20px;transition:box-shadow .2s}
+.dp:hover{box-shadow:0 4px 18px rgba(0,0,0,.05)}
+.dph{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.dph h3{font-size:14px;font-weight:700;color:var(--dark)}
+.db-btn{font-size:11px;font-weight:700;color:var(--blue);background:var(--blue-l);border:none;padding:4px 11px;border-radius:100px;cursor:none;font-family:'Inter',sans-serif;transition:all .2s}
+.db-btn:hover{background:var(--blue);color:#fff}
+.rm-list{display:flex;flex-direction:column;gap:6px}
+.rmi{display:flex;align-items:center;gap:9px;padding:9px 11px;border-radius:9px;border:1px solid transparent;cursor:none;transition:all .2s}
+.rmi:hover{background:#fafafa;border-color:var(--border)}
+.rmi.cur{background:var(--orange-l);border-color:rgba(221,75,11,.18)}
+.rdot{width:19px;height:19px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700}
+.rd-ok{background:var(--green-bg);color:var(--green)}.rd-cur{background:var(--orange-l);color:var(--orange)}.rd-todo{background:#f0f0f0;color:var(--light)}
+.ri2{flex:1}.ri2 b{display:block;font-size:11px;font-weight:700;color:var(--dark)}.ri2 span{font-size:10px;color:var(--light)}
+.rtg{font-size:9px;font-weight:700;padding:2px 6px;border-radius:100px}
+.dg{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.di{padding:11px;border:1px solid var(--border);border-radius:9px;cursor:none;transition:all .2s;display:flex;align-items:center;gap:8px}
+.di:hover{border-color:var(--blue);background:var(--blue-l)}
+.di-ic{font-size:16px}
+.di-n{flex:1;min-width:0}
+.di-n b{font-size:11px;font-weight:700;color:var(--dark);display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.di-n span{font-size:10px;color:var(--light)}
+.di-s{font-size:9px;font-weight:700;padding:2px 6px;border-radius:100px;white-space:nowrap}
+.ds-ok{background:var(--green-bg);color:var(--green)}.ds-pd{background:var(--amber-bg);color:var(--amber)}
+.ft-tot{background:var(--grad);border-radius:11px;padding:14px 16px;margin-bottom:12px}
+.ft-tot p{font-size:11px;color:rgba(255,255,255,.7);margin-bottom:2px}
+.ft-tot h3{font-size:26px;font-weight:800;color:#fff;letter-spacing:-1px}
+.gr-list{display:flex;flex-direction:column;gap:7px}
+.gr{padding:11px;border:1px solid var(--border);border-radius:9px;cursor:none;transition:all .2s}
+.gr:hover{border-color:var(--blue)}
+.gr-top{display:flex;justify-content:space-between;margin-bottom:5px}
+.gr-top b{font-size:11px;font-weight:700;color:var(--dark)}
+.gr-top span{font-size:13px;font-weight:800;color:var(--green)}
+.gr-bot{display:flex;gap:7px;align-items:center}
+.gr-m{font-size:9px;font-weight:700;background:var(--green-bg);color:var(--green);padding:2px 7px;border-radius:100px}
+.gr-d{font-size:10px;color:var(--light)}
+.btn-gr{font-size:10px;font-weight:700;background:var(--blue-l);color:var(--blue);border:none;padding:4px 10px;border-radius:100px;cursor:none;font-family:'Inter',sans-serif;margin-top:7px;display:block;transition:all .2s}
+.btn-gr:hover{background:var(--blue);color:#fff}
+.cl-list{display:flex;flex-direction:column;gap:6px}
+.cl{display:flex;align-items:center;gap:9px;padding:9px 11px;border-radius:9px;border:1px solid var(--border);cursor:none;transition:all .2s}
+.cl:hover{background:#fafafa}
+.cl-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.cd-am{background:#f59e0b}.cd-gn{background:#22c55e}
+.cl-i{flex:1}
+.cl-i b{font-size:11px;font-weight:700;color:var(--dark);display:block}
+.cl-i span{font-size:10px;color:var(--light)}
+.cl-d{font-size:11px;font-weight:700}
+.cda{color:#f59e0b}.cdg{color:#22c55e}
+.dv-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(10px);z-index:3000;align-items:center;justify-content:center;padding:20px}
+.dv-ov.open{display:flex}
+.dv{background:#fff;border-radius:20px;width:100%;max-width:720px;max-height:90vh;overflow:hidden;display:flex;flex-direction:column;animation:mpop .35s cubic-bezier(.34,1.56,.64,1) both;box-shadow:0 24px 64px rgba(0,0,0,.2)}
+.dv-hdr{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid var(--border)}
+.dv-hdr h3{font-size:15px;font-weight:700;color:var(--dark)}
+.dv-acts{display:flex;gap:8px;align-items:center}
+.btn-dv{padding:7px 14px;border-radius:100px;font-size:12px;font-weight:700;cursor:none;font-family:'Inter',sans-serif;transition:all .2s;border:1.5px solid var(--border);background:#fff;color:var(--dark)}
+.btn-dv:hover{border-color:var(--blue);color:var(--blue)}
+.btn-dv.pr{background:var(--blue);color:#fff;border-color:var(--blue)}
+.btn-dv.pr:hover{background:var(--purple)}
+.dv-x{width:28px;height:28px;border-radius:50%;background:#f4f4f4;border:none;cursor:none;font-size:13px;color:var(--mid);display:flex;align-items:center;justify-content:center;transition:all .2s}
+.dv-x:hover{background:var(--border);color:var(--dark)}
+.dv-body{flex:1;overflow-y:auto;padding:28px 32px}
+.dp-paper{font-size:13px;line-height:1.8;color:var(--dark)}
+.dp-head{text-align:center;margin-bottom:28px;padding-bottom:20px;border-bottom:2px solid var(--dark)}
+.dp-wm{display:inline-block;font-size:10px;font-weight:700;padding:3px 10px;border-radius:100px;margin-bottom:8px;letter-spacing:.5px;text-transform:uppercase}
+.dp-wm.ok{background:var(--blue-l);color:var(--blue)}
+.dp-wm.pd{background:var(--amber-bg);color:var(--amber)}
+.dp-wm.dn{background:var(--green-bg);color:var(--green)}
+.dp-title{font-size:16px;font-weight:800;letter-spacing:-.2px;margin-bottom:4px}
+.dp-sub{font-size:12px;color:var(--mid);font-weight:400}
+.dp-sec{margin-top:22px;margin-bottom:10px;font-size:11px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.8px;border-bottom:1px solid var(--blue-l);padding-bottom:5px}
+.dp-field{margin-bottom:12px}
+.dp-lbl{font-size:10px;font-weight:700;color:var(--light);letter-spacing:1px;text-transform:uppercase;margin-bottom:3px}
+.dp-val{font-size:14px;font-weight:600;color:var(--dark);padding:8px 12px;background:#fafafa;border:1px solid var(--border);border-radius:8px}
+.dp-clause{font-size:13px;color:var(--dark);line-height:1.7;margin-bottom:8px;padding-left:14px;border-left:2px solid var(--border)}
+.dp-sig{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:32px;padding-top:20px;border-top:1px solid var(--border)}
+.dp-sig-ln{border-top:1.5px solid var(--dark);padding-top:6px;font-size:11px;color:var(--mid)}
+.dp-note{font-size:11px;color:var(--light);text-align:center;margin-top:20px;padding-top:16px;border-top:1px solid var(--border);font-style:italic}
+.dp-submit-box{background:var(--blue-l);border-radius:12px;padding:16px;margin-top:20px;border:1px solid rgba(32,64,127,.1)}
+.dp-submit-box h4{font-size:13px;font-weight:700;color:var(--blue);margin-bottom:8px}
+.dp-submit-box p{font-size:12px;color:var(--mid);margin-bottom:10px;line-height:1.6}
+.dp-submit-link{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;color:var(--blue);text-decoration:none;cursor:pointer}
+.dp-submit-link:hover{text-decoration:underline}
+.mod-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);backdrop-filter:blur(8px);z-index:2000;align-items:center;justify-content:center;padding:20px}
+.mod-ov.open{display:flex}
+.mod-box{background:#fff;border-radius:22px;padding:32px;max-width:520px;width:100%;max-height:82vh;overflow-y:auto;position:relative;animation:mpop .32s cubic-bezier(.34,1.56,.64,1) both;box-shadow:0 28px 60px rgba(0,0,0,.18)}
+@keyframes mpop{from{opacity:0;transform:scale(.92) translateY(12px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.mod-x{position:absolute;top:14px;right:14px;background:#f4f4f4;border:none;width:28px;height:28px;border-radius:50%;cursor:none;font-size:13px;color:var(--mid);display:flex;align-items:center;justify-content:center;transition:all .2s}
+.mod-x:hover{background:var(--border);color:var(--dark)}
+.mod-box h2{font-size:22px;font-weight:800;letter-spacing:-.5px;color:var(--dark);margin-bottom:10px}
+.mod-box p{font-size:14px;color:var(--mid);line-height:1.7;font-weight:400;margin-bottom:14px}
+.mod-btn{width:100%;padding:13px;background:var(--dark);color:#fff;border:none;border-radius:100px;font-size:14px;font-weight:700;cursor:none;font-family:'Inter',sans-serif;transition:all .25s;position:relative;overflow:hidden;margin-top:4px}
+.mod-btn::before{content:'';position:absolute;inset:0;background:var(--grad);opacity:0;transition:opacity .3s}
+.mod-btn:hover::before{opacity:1}
+.mod-btn span{position:relative;z-index:1}
+#page-login{background:#f7f8fa}
+.login-wrap{max-width:440px;margin:0 auto;padding:80px 24px}
+.login-wrap h1{font-size:30px;font-weight:800;letter-spacing:-.8px;color:var(--dark);margin-bottom:6px}
+.login-wrap>p{font-size:15px;color:var(--mid);margin-bottom:32px}
+.login-card{background:#fff;border:1px solid var(--border);border-radius:20px;padding:32px}
+.login-fg{margin-bottom:16px}
+.login-fg label{display:block;font-size:12px;font-weight:700;color:var(--dark);margin-bottom:6px}
+.login-fg input{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;font-family:'Inter',sans-serif;background:#fff;color:var(--dark);outline:none;transition:border-color .2s}
+.login-fg input:focus{border-color:var(--blue)}
+.btn-login{width:100%;padding:13px;background:var(--dark);color:#fff;border:none;border-radius:100px;font-size:14px;font-weight:700;cursor:none;font-family:'Inter',sans-serif;transition:all .25s;position:relative;overflow:hidden;margin-top:4px}
+.btn-login::before{content:'';position:absolute;inset:0;background:var(--grad);opacity:0;transition:opacity .3s}
+.btn-login:hover::before{opacity:1}
+.btn-login span{position:relative;z-index:1}
+.login-or{text-align:center;font-size:12px;color:var(--light);margin:16px 0;position:relative}
+.login-or::before,.login-or::after{content:'';position:absolute;top:50%;width:40%;height:1px;background:var(--border)}
+.login-or::before{left:0}.login-or::after{right:0}
+.btn-oauth{width:100%;padding:11px;border:1.5px solid var(--border);border-radius:100px;font-size:13px;font-weight:600;cursor:none;font-family:'Inter',sans-serif;background:#fff;color:var(--dark);transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:10px}
+.btn-oauth:hover{border-color:var(--blue);background:var(--blue-l)}
+.login-switch{text-align:center;font-size:13px;color:var(--mid);margin-top:16px}
+.login-switch a{color:var(--blue);font-weight:700;cursor:none;text-decoration:none}
+.login-switch a:hover{text-decoration:underline}
+@keyframes fup{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .7s cubic-bezier(.23,1,.32,1),transform .7s cubic-bezier(.23,1,.32,1)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.rd1{transition-delay:.1s}.rd2{transition-delay:.2s}.rd3{transition-delay:.3s}.rd4{transition-delay:.4s}
+</style>
+</head>
+<body>
+<div id="cur"></div>
+<div id="cur-ring"></div>
+
+<nav id="nav">
+  <a class="nav-logo" onclick="gp('home')"><div class="logo-m">CC</div><span class="logo-t">CommonCounsel</span></a>
+  <div class="nav-links">
+    <a onclick="gs('features')">Features</a>
+    <a onclick="gs('how')">How It Works</a>
+    <a onclick="gp('funding')">Grants</a>
+    <a onclick="gs('cases')">Stories</a>
+    <a onclick="gs('pricing')">Pricing</a>
+  </div>
+  <div class="nav-r">
+    <button class="btn-ghost" onclick="gp('login')">Log in</button>
+    <button class="btn-pill" onclick="gp('ob')"><span>Get started free →</span></button>
+  </div>
+</nav>
+
+<div class="mod-ov" id="mod-ov" onclick="closeMod(event)">
+  <div class="mod-box"><button class="mod-x" onclick="closeMod()">✕</button><div id="mod-body"></div></div>
+</div>
+
+<div id="page-home" class="page active">
+<section class="hero">
+  <div class="h-grid"></div>
+  <div class="h-orb o1"></div><div class="h-orb o2"></div><div class="h-orb o3"></div>
+  <div class="h-cnt">
+    <div class="h-badge"><div class="live"></div>Now live across all 10 Canadian provinces</div>
+    <h1>Your legal team, compliance dept.,<br>and grants advisor — <span class="gt">for a fraction<br>of the cost.</span></h1>
+    <p class="h-sub">Canada has 4.2 million small businesses. Fewer than 10% can afford a lawyer. CommonCounsel gives every business owner the roadmap, documents, and funding they need to start, grow, and stay compliant.</p>
+    <div class="h-inp">
+      <input type="email" placeholder="Enter your email address">
+      <button class="btn-hero" onclick="gp('ob')"><span>Build my roadmap →</span></button>
+    </div>
+    <div class="h-av">
+      <div class="avs"><div class="av av1">AH</div><div class="av av2">MD</div><div class="av av3">PS</div><div class="av av4">JK</div></div>
+      <p>Join <strong>4,200+</strong> Canadian entrepreneurs growing with CommonCounsel</p>
+    </div>
+    <div class="h-pills">
+      <div class="hpill" onclick="gs('features')">📍 Personalized Roadmap</div>
+      <div class="hpill" onclick="openDV('vault')">📁 Document Vault</div>
+      <div class="hpill" onclick="gp('funding')">💰 Funding Matcher</div>
+      <div class="hpill" onclick="openMod('compliance')">🔔 Compliance Tracker</div>
+      <div class="hpill">🇨🇦 All 10 Provinces</div>
+    </div>
+  </div>
+  <div class="sh"><div class="sl"></div><span>Scroll</span></div>
+</section>
+
+<div class="mq-wrap">
+  <div class="mq-inner">
+    <div class="mqp"><span class="mn">4.2M</span><span class="ml">Small businesses in Canada</span></div>
+    <div class="mqp"><span class="mn">$30B+</span><span class="ml">Annual funding unclaimed</span></div>
+    <div class="mqp"><span class="mn">98%</span><span class="ml">Of all Canadian businesses are small</span></div>
+    <div class="mqp"><span class="mn">3 Govts</span><span class="ml">To navigate simultaneously</span></div>
+    <div class="mqp"><span class="mn">$400/hr</span><span class="ml">Average Canadian lawyer rate</span></div>
+    <div class="mqp"><span class="mn">10M+</span><span class="ml">Canadians in small business</span></div>
+    <div class="mqp"><span class="mn">4.2M</span><span class="ml">Small businesses in Canada</span></div>
+    <div class="mqp"><span class="mn">$30B+</span><span class="ml">Annual funding unclaimed</span></div>
+    <div class="mqp"><span class="mn">98%</span><span class="ml">Of all Canadian businesses are small</span></div>
+    <div class="mqp"><span class="mn">3 Govts</span><span class="ml">To navigate simultaneously</span></div>
+    <div class="mqp"><span class="mn">$400/hr</span><span class="ml">Average Canadian lawyer rate</span></div>
+    <div class="mqp"><span class="mn">10M+</span><span class="ml">Canadians in small business</span></div>
+  </div>
+</div>
+
+<div class="prob-wrap sec-full" id="problem">
+  <div class="sec-in">
+    <div class="ey ey-o reveal">The Problem</div>
+    <h2 class="st reveal" style="color:#fff">Growing a business in Canada <span class="gt">is harder than it should be</span></h2>
+    <div class="prob-grid">
+      <div class="prob-card reveal rd1"><div class="prob-n">01</div><div class="prob-icon">🏛️</div><h3>The Regulatory Maze</h3><p>Federal. Provincial. Municipal. Three layers — each with their own forms, fees, and timelines. Nobody maps it for you.</p></div>
+      <div class="prob-card reveal rd2"><div class="prob-n">02</div><div class="prob-icon">💸</div><h3>The Funding Gap</h3><p>$30 billion in grants is available every year. Most goes unclaimed — not because businesses don't qualify, but because they don't know it exists.</p></div>
+      <div class="prob-card reveal rd3"><div class="prob-n">03</div><div class="prob-icon">⚖️</div><h3>The Cost Barrier</h3><p>A business lawyer charges $300–$600/hr. Full setup costs $3,000–$9,000 in legal fees alone. Most small businesses simply can't afford it.</p></div>
+    </div>
+  </div>
+</div>
+
+<section class="sec" id="features">
+  <div class="ey ey-b reveal">The Solution</div>
+  <h2 class="st reveal">Everything you need. <span class="gt">In one place.</span></h2>
+  <p class="sub reveal">Tell us about your business and your goal. CommonCounsel does the rest — province-specific, goal-specific, instantly.</p>
+  <div class="feat-grid">
+    <div class="fc wide reveal" onclick="openMod('roadmap')">
+      <div>
+        <div class="fi fi-b">📍</div>
+        <h3>Personalized Roadmap</h3>
+        <p>Input your business type, province, and goal. Get an exact step-by-step timeline with costs, deadlines, and which government body handles each step.</p>
+        <a class="fc-lnk">See a sample roadmap <span class="arr">→</span></a>
+      </div>
+      <div class="mini-rm">
+        <p class="mini-rm-lbl">🍔 Food Truck · Toronto, ON</p>
+        <div class="mrr"><div class="md md-ok">✓</div><div class="mi"><b>Federal Business Number</b><span>Completed · Free</span></div><span class="rt rf">Federal</span></div>
+        <div class="mrr"><div class="md md-ok">✓</div><div class="mi"><b>Ontario Registration</b><span>Completed · $60</span></div><span class="rt rp">Provincial</span></div>
+        <div class="mrr"><div class="md md-cur">→</div><div class="mi"><b>Toronto Business Licence</b><span>In Progress · $195</span></div><span class="rt rm">Municipal</span></div>
+        <div class="mrr"><div class="md md-todo"></div><div class="mi"><b>Food Handler Certificate</b><span>Upcoming · $35</span></div><span class="rt rp">Provincial</span></div>
+      </div>
+    </div>
+    <div class="fc reveal rd1" onclick="openDV('vault')">
+      <div class="fi fi-o">📁</div>
+      <h3>Document Vault</h3>
+      <p>Every legal, tax, employment, and licensing document pre-filled with your info — with official submission links, fees, and deadlines included.</p>
+      <a class="fc-lnk">Browse 40+ documents <span class="arr">→</span></a>
+    </div>
+    <div class="fc reveal rd2" onclick="gp('funding')">
+      <div class="fi fi-p">💰</div>
+      <h3>Funding Matcher</h3>
+      <p>Matched to every federal, provincial, and municipal grant and loan you qualify for — with pre-filled applications so you submit in minutes.</p>
+      <a class="fc-lnk">Find my grants <span class="arr">→</span></a>
+    </div>
+    <div class="fc reveal rd3" onclick="openMod('compliance')">
+      <div class="fi fi-b">🔔</div>
+      <h3>Compliance Tracker</h3>
+      <p>Automatic reminders for every deadline — renewals, filings, tax remittances, health inspections. Never pay a preventable fine.</p>
+      <a class="fc-lnk">See how it works <span class="arr">→</span></a>
+    </div>
+  </div>
+</section>
+
+<div class="how-bg sec-full" id="how">
+  <section class="sec">
+    <div class="ey ey-p reveal">Process</div>
+    <h2 class="st reveal">From overwhelmed to organized <span class="gt">in under 10 minutes</span></h2>
+    <div class="steps">
+      <div class="step reveal rd1"><div class="sn">1</div><h4>Tell us about your business</h4><p>Type, province, city, stage, goal. 3 minutes.</p></div>
+      <div class="step reveal rd2"><div class="sn">2</div><h4>Get your roadmap</h4><p>AI generates your province-specific plan instantly.</p></div>
+      <div class="step reveal rd3"><div class="sn">3</div><h4>Access your documents</h4><p>Pre-filled and ready. Download and submit.</p></div>
+      <div class="step reveal rd4"><div class="sn">4</div><h4>Find your funding</h4><p>Matched grants with pre-drafted applications.</p></div>
+      <div class="step reveal"><div class="sn">5</div><h4>Stay compliant</h4><p>Automated reminders keep you on track.</p></div>
+    </div>
+    <div style="text-align:center;margin-top:40px" class="reveal">
+      <button onclick="gp('ob')" style="background:var(--dark);color:#fff;border:none;cursor:none;padding:13px 26px;border-radius:100px;font-size:14px;font-weight:700;font-family:'Inter',sans-serif;transition:background .25s" onmouseover="this.style.background='var(--blue)'" onmouseout="this.style.background='var(--dark)'">Start my roadmap now →</button>
+    </div>
+  </section>
+</div>
+
+<section class="sec" id="funding-sect">
+  <div class="ey ey-o reveal">Funding & Grants</div>
+  <h2 class="st reveal">$30 billion in funding.<br><span class="gt">Most businesses never see a dollar.</span></h2>
+  <p class="sub reveal">CommonCounsel matches you to every program you qualify for and pre-fills the application.</p>
+  <div class="sf-grid">
+    <div class="sf reveal rd1">
+      <div class="fi fi-b">🇨🇦</div>
+      <h3>Federal Programs</h3>
+      <p>CSBFP, CDAP, BDC loans, CanExport, NRC IRAP and more — matched to your business profile.</p>
+      <button class="sfb" onclick="gp('eligibility')"><span>Check my eligibility</span><span class="sa">→</span></button>
+    </div>
+    <div class="sf reveal rd2">
+      <div class="fi fi-o">🗺️</div>
+      <h3>Regional Programs</h3>
+      <p>FedDev, PacifiCan, PrairiesCan, ACOA and more — location-specific funding for your province.</p>
+      <button class="sfb" onclick="gp('eligibility')"><span>Find regional funding</span><span class="sa">→</span></button>
+    </div>
+    <div class="sf reveal rd3">
+      <div class="fi fi-p">👥</div>
+      <h3>Profile Funding</h3>
+      <p>Dedicated streams for women, Indigenous, newcomer, youth, and minority-owned businesses.</p>
+      <button class="sfb" onclick="gp('eligibility')"><span>Find my profile funding</span><span class="sa">→</span></button>
+    </div>
+  </div>
+</section>
+
+<div style="background:#fafafa;padding:100px 0">
+  <div class="sec-in">
+    <div class="ey ey-b reveal">Industries</div>
+    <h2 class="st reveal">Built for <span class="gt">your industry</span></h2>
+    <p class="sub reveal">Every industry has different requirements. CommonCounsel knows yours.</p>
+    <div class="ind-grid">
+      <div class="ind reveal rd1" onclick="gp('ob')"><span class="ie">🍔</span><h4>Food & Beverage</h4><span>Restaurants, trucks, catering</span></div>
+      <div class="ind reveal rd2" onclick="gp('ob')"><span class="ie">🛍️</span><h4>Retail</h4><span>Boutiques, e-commerce, pop-ups</span></div>
+      <div class="ind reveal rd3" onclick="gp('ob')"><span class="ie">🔨</span><h4>Trades</h4><span>Contractors, electricians, plumbers</span></div>
+      <div class="ind reveal rd4" onclick="gp('ob')"><span class="ie">💆</span><h4>Health & Wellness</h4><span>Salons, spas, physiotherapy</span></div>
+      <div class="ind reveal rd1" onclick="gp('ob')"><span class="ie">💻</span><h4>Tech & Creative</h4><span>Agencies, SaaS, studios</span></div>
+      <div class="ind reveal rd2" onclick="gp('ob')"><span class="ie">🏨</span><h4>Hospitality</h4><span>Hotels, B&Bs, tourism</span></div>
+      <div class="ind reveal rd3" onclick="gp('ob')"><span class="ie">🌾</span><h4>Agriculture</h4><span>Farms, food production</span></div>
+      <div class="ind reveal rd4" onclick="gp('ob')"><span class="ie">🚚</span><h4>Transportation</h4><span>Trucking, delivery, couriers</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="cases-wrap sec-full" id="cases">
+  <div class="sec-in">
+    <div class="ey reveal" style="color:rgba(255,255,255,.4)">Case Studies</div>
+    <h2 class="st reveal" style="color:#fff">Real Canadian businesses. <span class="gt">Real results.</span></h2>
+    <div class="cases-grid">
+      <div class="cc reveal rd1" onclick="openMod('c1')"><div class="cc-top"><span class="cc-tag">Food & Beverage · Toronto, ON</span><h3>Pita Palace 🍕</h3><p class="cc-city">Newcomer entrepreneur · 9 licenses across 3 governments</p></div><div class="cc-mid"><p class="cc-quote">"CommonCounsel mapped everything in minutes. I had no idea I qualified for $22,000 in newcomer grants."</p></div><div class="cc-bot"><div class="cc-r">Saved <b>$6,000+</b> in legal fees</div><div class="cc-r">Secured <b>$22,000</b> in grants</div><div class="cc-r">Opened <b>6 weeks</b> ahead of schedule</div><button class="btn-cc">Read full story →</button></div></div>
+      <div class="cc reveal rd2" onclick="openMod('c2')"><div class="cc-top"><span class="cc-tag">Trades · Calgary, AB</span><h3>NovaBuild 🔨</h3><p class="cc-city">Scaling from sole proprietor to corporation</p></div><div class="cc-mid"><p class="cc-quote">"CommonCounsel built the roadmap, generated every document, and found $180,000 in equipment financing."</p></div><div class="cc-bot"><div class="cc-r">Incorporated in <b>11 days</b></div><div class="cc-r">Secured <b>$180,000</b> CSBFP loan</div><div class="cc-r">Won <b>first commercial</b> contract</div><button class="btn-cc">Read full story →</button></div></div>
+      <div class="cc reveal rd3" onclick="openMod('c3')"><div class="cc-top"><span class="cc-tag">Health & Wellness · Vancouver, BC</span><h3>BloomWell 💆</h3><p class="cc-city">Multi-therapist wellness studio</p></div><div class="cc-mid"><p class="cc-quote">"CommonCounsel caught a GST misclassification that would have cost thousands, and found $31,500 in grants."</p></div><div class="cc-bot"><div class="cc-r">Avoided <b>costly CRA penalty</b></div><div class="cc-r">Trademarked <b>BloomWell</b> nationally</div><div class="cc-r">Secured <b>$31,500</b> in grants</div><button class="btn-cc">Read full story →</button></div></div>
+    </div>
+  </div>
+</div>
+
+<section class="sec">
+  <div class="ey ey-p reveal">Testimonials</div>
+  <h2 class="st reveal">What business owners <span class="gt">are saying</span></h2>
+  <div class="test-grid">
+    <div class="tc reveal rd1"><div class="tc-stars" style="color:var(--orange)">★★★★★</div><p>"I spent three months figuring out what licenses I needed. CommonCounsel did it in four minutes."</p><div class="tc-au"><strong>Fatima K.</strong><span>Café Owner, Mississauga ON</span></div></div>
+    <div class="tc reveal rd2"><div class="tc-stars" style="color:var(--purple)">★★★★★</div><p>"CommonCounsel generated every document I needed and found my financing. Saved thousands."</p><div class="tc-au"><strong>Derek M.</strong><span>General Contractor, Edmonton AB</span></div></div>
+    <div class="tc reveal rd3"><div class="tc-stars" style="color:var(--blue)">★★★★★</div><p>"The grant matching alone was worth it. I got $18,000 toward my studio buildout."</p><div class="tc-au"><strong>Yuki T.</strong><span>Yoga Studio Owner, Victoria BC</span></div></div>
+  </div>
+</section>
+
+<section class="sec" id="pricing" style="background:#fafafa;max-width:100%;padding:100px 48px">
+  <div style="max-width:1200px;margin:0 auto">
+    <div class="ey ey-b reveal">Pricing</div>
+    <h2 class="st reveal">Less than a coffee a day. <span class="gt">Everything you need.</span></h2>
+    <div class="price-grid">
+      <div class="pc reveal rd1"><p class="pc-name">Starter</p><div class="pc-price"><span class="pc-big">Free</span></div><p class="pc-desc">Get started and see your roadmap today</p><ul class="pc-feats"><li>Business roadmap (5 steps)</li><li>5 document templates</li><li>Basic grant matching</li><li>Email reminders</li></ul><button class="btn-pc" onclick="gp('ob')">Start for free →</button></div>
+      <div class="pc feat reveal rd2"><div class="feat-badge">Most Popular</div><p class="pc-name">Growth</p><div class="pc-price"><span class="pc-big">$7</span><span class="pc-per">.99/mo</span></div><p class="pc-desc">Everything you need to grow and stay compliant</p><ul class="pc-feats"><li>Full personalized roadmap</li><li>Unlimited documents + PDF download</li><li>Full grant matching + pre-filled apps</li><li>Compliance tracker</li><li>Bilingual EN/FR</li><li>All 10 provinces</li><li>AI legal advisor</li></ul><button class="btn-pc pf" onclick="gp('ob')">Start Growth →</button></div>
+      <div class="pc reveal rd3"><p class="pc-name">Scale</p><div class="pc-price"><span class="pc-big">$19</span><span class="pc-per">.99/mo</span></div><p class="pc-desc">For businesses with multiple locations or teams</p><ul class="pc-feats"><li>Everything in Growth</li><li>Multi-location support</li><li>Team access (up to 5)</li><li>Priority document updates</li><li>Phone + chat support</li></ul><button class="btn-pc" onclick="gp('ob')">Start Scaling →</button></div>
+    </div>
+    <p class="reveal" style="text-align:center;margin-top:18px;font-size:13px;color:var(--light)">Canadian lawyers charge $400/hr. CommonCounsel costs less per month than 90 seconds of legal advice.</p>
+  </div>
+</section>
+
+<div class="cta-sec">
+  <h2 class="reveal">Your roadmap is <span class="gt">waiting.</span></h2>
+  <p class="reveal">Join thousands of Canadian entrepreneurs who stopped guessing and started growing.</p>
+  <div class="cta-btns reveal"><button class="btn-cw" onclick="gp('ob')">Build my free roadmap →</button><button class="btn-co" onclick="openMod('demo')">Book a demo</button></div>
+  <div class="cta-trust reveal"><span>No credit card required</span><span>Free to start</span><span>All 10 provinces</span><span>Under 5 minutes</span></div>
+</div>
+
+<footer>
+  <div class="ft">
+    <div class="ft-brand"><div class="ft-logo"><div class="ft-lm">CC</div><span class="ft-lt">CommonCounsel</span></div><p>The legal and growth co-pilot for every Canadian small business.</p></div>
+    <div class="ft-col"><h5>Product</h5><a onclick="gs('features')">Features</a><a onclick="gs('how')">How It Works</a><a onclick="gs('pricing')">Pricing</a><a onclick="openDV('vault')">Document Vault</a><a onclick="gp('funding')">Grants</a></div>
+    <div class="ft-col"><h5>Industries</h5><a onclick="gp('ob')">Food & Beverage</a><a onclick="gp('ob')">Retail</a><a onclick="gp('ob')">Trades</a><a onclick="gp('ob')">Health & Wellness</a><a onclick="gp('ob')">Tech & Creative</a></div>
+    <div class="ft-col"><h5>Company</h5><a onclick="openMod('about')">About Us</a><a onclick="gs('cases')">Case Studies</a><a>Blog</a><a>Press</a><a>Careers</a></div>
+    <div class="ft-col"><h5>Support</h5><a onclick="openMod('faq')">FAQ</a><a>Help Centre</a><a onclick="openMod('demo')">Book a Demo</a><a onclick="openMod('privacy')">Privacy Policy</a><a onclick="openMod('terms')">Terms of Service</a></div>
+  </div>
+  <div class="ft-bot"><p>© 2026 CommonCounsel Inc. 🇨🇦 Proudly Canadian · EN | FR</p><p class="ft-disc">CommonCounsel provides document templates and general information only. It is not a law firm and does not provide legal advice.</p></div>
+</footer>
+</div>
+
+<div id="page-ob" class="page">
+<div class="ob-wrap">
+  <div class="ob-top"><p id="ob-lbl">Step 1 of 5 — Business Type</p><button onclick="gp('home')">✕ Exit</button></div>
+  <div class="ob-bar"><div class="ob-prog" id="ob-prog" style="width:20%"></div></div>
+  <div class="ob-step active" id="obs-1">
+    <h2>What kind of business?</h2><p class="ob-sub">Choose the category that best fits</p>
+    <div class="ob-tiles">
+      <div class="ob-t" onclick="osel(this)"><span class="oti">🍔</span><h4>Food & Beverage</h4></div>
+      <div class="ob-t" onclick="osel(this)"><span class="oti">🛍️</span><h4>Retail</h4></div>
+      <div class="ob-t" onclick="osel(this)"><span class="oti">🔨</span><h4>Trades</h4></div>
+      <div class="ob-t" onclick="osel(this)"><span class="oti">💆</span><h4>Health & Wellness</h4></div>
+      <div class="ob-t" onclick="osel(this)"><span class="oti">💻</span><h4>Tech & Creative</h4></div>
+      <div class="ob-t" onclick="osel(this)"><span class="oti">🏨</span><h4>Hospitality</h4></div>
+      <div class="ob-t" onclick="osel(this)"><span class="oti">🌾</span><h4>Agriculture</h4></div>
+      <div class="ob-t" onclick="osel(this)"><span class="oti">🚚</span><h4>Transport</h4></div>
+      <div class="ob-t" onclick="osel(this)"><span class="oti">❓</span><h4>Other</h4></div>
+    </div>
+    <div class="ob-nav"><button class="btn-ob-b" onclick="gp('home')">← Home</button><button class="btn-ob-n" onclick="ons(2)"><span>Continue →</span></button></div>
+  </div>
+  <div class="ob-step" id="obs-2">
+    <h2>Where is your business?</h2><p class="ob-sub">We use this to find province-specific requirements</p>
+    <div class="ob-fg"><label>Province or Territory</label><select><option value="">Select...</option><option>Ontario</option><option>British Columbia</option><option>Alberta</option><option>Quebec</option><option>Manitoba</option><option>Saskatchewan</option><option>Nova Scotia</option><option>New Brunswick</option><option>Newfoundland &amp; Labrador</option><option>Prince Edward Island</option><option>Yukon</option><option>Northwest Territories</option><option>Nunavut</option></select></div>
+    <div class="ob-fg"><label>City</label><input type="text" placeholder="e.g. Toronto, Vancouver, Calgary..."></div>
+    <div class="ob-nav"><button class="btn-ob-b" onclick="ons(1)">← Back</button><button class="btn-ob-n" onclick="ons(3)"><span>Continue →</span></button></div>
+  </div>
+  <div class="ob-step" id="obs-3">
+    <h2>Where are you in your journey?</h2><p class="ob-sub">This helps us show you exactly what's relevant</p>
+    <div class="ob-rows">
+      <div class="ob-r" onclick="osel(this)"><div class="ri">🌱</div><div><h4>Just Getting Started</h4><p>I have an idea, want to make it official</p></div></div>
+      <div class="ob-r" onclick="osel(this)"><div class="ri">📋</div><div><h4>Registered but Not Launched</h4><p>Done some paperwork, haven't opened yet</p></div></div>
+      <div class="ob-r" onclick="osel(this)"><div class="ri">🚀</div><div><h4>Up and Running</h4><p>Business is open and operating</p></div></div>
+      <div class="ob-r" onclick="osel(this)"><div class="ri">📈</div><div><h4>Ready to Scale</h4><p>Growing and need to level up my structure</p></div></div>
+    </div>
+    <div class="ob-nav"><button class="btn-ob-b" onclick="ons(2)">← Back</button><button class="btn-ob-n" onclick="ons(4)"><span>Continue →</span></button></div>
+  </div>
+  <div class="ob-step" id="obs-4">
+    <h2>What do you want to accomplish?</h2><p class="ob-sub">Pick up to 3 goals right now</p>
+    <div class="ob-rows">
+      <div class="ob-r" onclick="this.classList.toggle('sel')"><div class="ri">📝</div><div><h4>Register my business</h4><p>Get incorporated and officially registered</p></div></div>
+      <div class="ob-r" onclick="this.classList.toggle('sel')"><div class="ri">🪪</div><div><h4>Get licenses and permits</h4><p>Everything needed to legally operate</p></div></div>
+      <div class="ob-r" onclick="this.classList.toggle('sel')"><div class="ri">👤</div><div><h4>Hire my first employee</h4><p>Payroll, contracts, employment compliance</p></div></div>
+      <div class="ob-r" onclick="this.classList.toggle('sel')"><div class="ri">💰</div><div><h4>Apply for grants or loans</h4><p>Find and apply for funding I qualify for</p></div></div>
+      <div class="ob-r" onclick="this.classList.toggle('sel')"><div class="ri">🛡️</div><div><h4>Trademark or protect my brand</h4><p>CIPO trademark and IP protection</p></div></div>
+    </div>
+    <div class="ob-nav"><button class="btn-ob-b" onclick="ons(3)">← Back</button><button class="btn-ob-n" onclick="ons(5)"><span>Continue →</span></button></div>
+  </div>
+  <div class="ob-step" id="obs-5">
+    <h2>Almost there.</h2><p class="ob-sub">Tell us about yourself — this unlocks your personalized dashboard.</p>
+    <div class="ob-fg"><label>Your Full Name *</label><input id="ob-name" type="text" placeholder="e.g. Jane Smith" required></div>
+    <div class="ob-fg"><label>Business Name *</label><input id="ob-bizname" type="text" placeholder="e.g. My Coffee Shop, NovaBuild Inc." required></div>
+    <div class="ob-fg"><label>Email Address</label><input id="ob-email" type="email" placeholder="your@email.com"></div>
+    <div class="ob-fg"><label>Password</label><input type="password" placeholder="Create a password"></div>
+    <p style="font-size:12px;font-weight:700;color:var(--dark);margin-bottom:10px;margin-top:4px">Any of these apply? (unlocks extra funding)</p>
+    <div class="ob-checks">
+      <div class="ob-ck" onclick="this.classList.toggle('sel')">👩 Woman-owned</div>
+      <div class="ob-ck" onclick="this.classList.toggle('sel')">🧑‍🦱 Visible minority</div>
+      <div class="ob-ck" onclick="this.classList.toggle('sel')">🪶 Indigenous-owned</div>
+      <div class="ob-ck" onclick="this.classList.toggle('sel')">🌍 Newcomer entrepreneur</div>
+      <div class="ob-ck" onclick="this.classList.toggle('sel')">🧑 Youth (under 35)</div>
+      <div class="ob-ck" onclick="this.classList.toggle('sel')">🌄 Rural business</div>
+    </div>
+    <div id="ob-error" style="display:none;background:#fef2f2;border:1px solid #fca5a5;border-radius:10px;padding:10px 14px;font-size:13px;color:#b91c1c;margin-top:8px">⚠️ Please enter your name and business name to continue.</div>
+    <div class="ob-nav">
+      <button class="btn-ob-b" onclick="ons(4)">← Back</button>
+      <button class="btn-ob-n" onclick="finishOnboarding()" style="background:linear-gradient(135deg,var(--blue),var(--purple),var(--orange))"><span>Build my roadmap 🚀</span></button>
+    </div>
+  </div>
+</div>
+</div>
+
+<div id="page-login" class="page">
+<div style="min-height:100vh;display:flex;align-items:center;justify-content:center">
+<div class="login-wrap" style="padding-top:0">
+  <div style="text-align:center;margin-bottom:32px">
+    <div style="width:44px;height:44px;border-radius:12px;background:var(--grad);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;color:#fff;margin:0 auto 12px">CC</div>
+    <h1>Welcome back</h1>
+    <p style="font-size:15px;color:var(--mid);margin-top:4px">Sign in to your CommonCounsel account</p>
+  </div>
+  <div class="login-card">
+    <button class="btn-oauth">Continue with Google</button>
+    <button class="btn-oauth">Continue with Apple</button>
+    <div class="login-or">or</div>
+    <div class="login-fg"><label>Full Name</label><input id="login-name" type="text" placeholder="Your name"></div>
+    <div class="login-fg"><label>Business Name</label><input id="login-biz" type="text" placeholder="Your business name"></div>
+    <div class="login-fg"><label>Email address</label><input id="login-email" type="email" placeholder="you@company.com"></div>
+    <div class="login-fg"><label>Password</label><input type="password" placeholder="Your password"></div>
+    <button class="btn-login" onclick="finishLogin()"><span>Sign in →</span></button>
+    <div class="login-switch" style="margin-top:12px"><a href="#">Forgot password?</a></div>
+  </div>
+  <div class="login-switch">Don't have an account? <a onclick="gp('ob')">Get started free →</a></div>
+</div>
+</div>
+</div>
+
+<div class="dv-ov" id="dv-ov" onclick="closeDV(event)">
+  <div class="dv">
+    <div class="dv-hdr">
+      <h3 id="dv-title">Document</h3>
+      <div class="dv-acts">
+        <button class="btn-dv" onclick="window.print()">🖨️ Print</button>
+        <button class="btn-dv pr" id="btn-pdf" onclick="downloadPDF()">⬇ Download PDF</button>
+        <button class="dv-x" onclick="closeDV()">✕</button>
+      </div>
+    </div>
+    <div class="dv-body" id="dv-body"></div>
+  </div>
+</div>
+
+<div id="page-funding" class="page">
+<div class="fund-hero">
+  <div style="position:relative;z-index:1">
+    <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);padding:6px 14px;border-radius:100px;font-size:12px;font-weight:600;color:rgba(255,255,255,.7);margin-bottom:20px">💰 Grant Database</div>
+    <h1>$30 Billion in Funding.<br><span class="gt">Find What's Yours.</span></h1>
+    <p>CommonCounsel matches you to every federal, provincial, and profile-specific program you qualify for — and pre-fills the application.</p>
+    <button class="btn-cw" onclick="gp('eligibility')" style="margin-bottom:0">Check my eligibility →</button>
+  </div>
+  <div class="fund-hero-stats" style="margin-top:48px">
+    <div class="fhs"><div class="fhs-n">$30B+</div><div class="fhs-l">Available annually</div></div>
+    <div class="fhs"><div class="fhs-n">400+</div><div class="fhs-l">Programs tracked</div></div>
+    <div class="fhs"><div class="fhs-n">98%</div><div class="fhs-l">Match accuracy</div></div>
+    <div class="fhs"><div class="fhs-n">All 13</div><div class="fhs-l">Provinces & territories</div></div>
+  </div>
+</div>
+<div class="fund-filter">
+  <button class="ff-pill active" onclick="filterGrants(this,'all')">All Programs</button>
+  <button class="ff-pill" onclick="filterGrants(this,'federal')">🇨🇦 Federal</button>
+  <button class="ff-pill" onclick="filterGrants(this,'regional')">🗺️ Regional</button>
+  <button class="ff-pill" onclick="filterGrants(this,'women')">👩 Women</button>
+  <button class="ff-pill" onclick="filterGrants(this,'indigenous')">🪶 Indigenous</button>
+  <button class="ff-pill" onclick="filterGrants(this,'newcomer')">🌍 Newcomer</button>
+  <button class="ff-pill" onclick="filterGrants(this,'youth')">🧑 Youth</button>
+  <button class="ff-pill" onclick="filterGrants(this,'tech')">💻 Tech</button>
+  <button class="btn-pill" style="margin-left:auto" onclick="gp('eligibility')"><span>Check my eligibility →</span></button>
+</div>
+<div class="fund-grid-wrap">
+  <div class="fund-grid" id="grant-grid"></div>
+</div>
+</div>
+
+<div id="page-eligibility" class="page">
+<div class="elig-wrap">
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:24px">
+    <button onclick="gp('funding')" style="background:#f4f4f4;border:none;width:36px;height:36px;border-radius:50%;cursor:none;font-size:16px;display:flex;align-items:center;justify-content:center;transition:background .2s" onmouseover="this.style.background='var(--border)'" onmouseout="this.style.background='#f4f4f4'">←</button>
+    <span style="font-size:13px;color:var(--light)">Back to Grants</span>
+  </div>
+  <h1>Check Your Eligibility</h1>
+  <p>Answer a few questions and we'll instantly show every grant and loan program you qualify for.</p>
+  <div class="elig-card">
+    <h3>📍 About Your Business</h3>
+    <div class="elig-q"><label>Business Type</label><select id="elig-type"><option value="">Select...</option><option>Food & Beverage</option><option>Retail</option><option>Trades / Construction</option><option>Health & Wellness</option><option>Tech & Creative</option><option>Hospitality</option><option>Agriculture</option><option>Transportation</option><option>Other</option></select></div>
+    <div class="elig-q"><label>Province or Territory</label><select id="elig-prov"><option value="">Select...</option><option>Ontario</option><option>British Columbia</option><option>Alberta</option><option>Quebec</option><option>Manitoba</option><option>Saskatchewan</option><option>Nova Scotia</option><option>New Brunswick</option><option>Newfoundland & Labrador</option><option>Prince Edward Island</option><option>Yukon</option><option>Northwest Territories</option><option>Nunavut</option></select></div>
+    <div class="elig-q"><label>Annual Revenue</label><select id="elig-rev"><option value="">Select...</option><option>Pre-revenue / Startup</option><option>Under $100K</option><option>$100K – $500K</option><option>$500K – $2M</option><option>$2M+</option></select></div>
+    <div class="elig-q"><label>Number of Employees</label><select><option value="">Select...</option><option>Just me (sole proprietor)</option><option>2–5</option><option>6–20</option><option>21–100</option><option>100+</option></select></div>
+  </div>
+  <div class="elig-card">
+    <h3>👤 Your Profile <span style="font-size:12px;font-weight:400;color:var(--light)">(unlocks additional funding)</span></h3>
+    <div class="elig-checks-grid">
+      <div class="elig-ck" onclick="this.classList.toggle('sel')">👩 Woman-owned</div>
+      <div class="elig-ck" onclick="this.classList.toggle('sel')">🧑‍🦱 Visible minority</div>
+      <div class="elig-ck" onclick="this.classList.toggle('sel')">🪶 Indigenous-owned</div>
+      <div class="elig-ck" onclick="this.classList.toggle('sel')">🌍 Newcomer entrepreneur</div>
+      <div class="elig-ck" onclick="this.classList.toggle('sel')">🧑 Youth (under 35)</div>
+      <div class="elig-ck" onclick="this.classList.toggle('sel')">🌄 Rural business</div>
+    </div>
+  </div>
+  <div class="elig-card">
+    <h3>🎯 What do you need funding for?</h3>
+    <div class="elig-checks-grid">
+      <div class="elig-ck" onclick="this.classList.toggle('sel')">🏗️ Equipment / Capital</div>
+      <div class="elig-ck" onclick="this.classList.toggle('sel')">💻 Digital adoption</div>
+      <div class="elig-ck" onclick="this.classList.toggle('sel')">👥 Hiring / Training</div>
+      <div class="elig-ck" onclick="this.classList.toggle('sel')">🌍 Export / Expansion</div>
+      <div class="elig-ck" onclick="this.classList.toggle('sel')">🔬 R&D / Innovation</div>
+      <div class="elig-ck" onclick="this.classList.toggle('sel')">🏠 Leasehold improvements</div>
+    </div>
+  </div>
+  <button class="btn-check" onclick="runEligibility()"><span>🔍 Find my funding now →</span></button>
+  <div class="elig-results" id="elig-results">
+    <h3>🎉 You qualify for funding!</h3>
+    <p id="elig-count">Based on your profile, here's what you may be eligible for:</p>
+    <div class="er-total" id="elig-total">$47,500</div>
+    <p style="color:rgba(255,255,255,.4);font-size:12px;margin-bottom:16px">Total potential funding across matched programs</p>
+    <div id="elig-matches"></div>
+    <button class="mod-btn" onclick="gp('ob')" style="margin-top:12px"><span>Start my application →</span></button>
+  </div>
+</div>
+</div>
+
+<div id="page-db" class="page">
+<div class="db-layout">
+  <div class="db-side">
+    <div class="db-biz"><h4>🏢 My Business</h4><p>Your location · Your industry</p><div class="db-health"><div class="db-hp">Business Health <span>0%</span></div><div class="db-ht"><div class="db-hf" style="width:0%"></div></div></div></div>
+    <div class="db-nav">
+      <a class="dblk active" id="tab-overview" onclick="showTab('overview',this)"><span class="ico">🏠</span>Overview</a>
+      <a class="dblk" id="tab-roadmap" onclick="showTab('roadmap',this)"><span class="ico">🗺️</span>My Roadmap</a>
+      <a class="dblk" onclick="openDV('vault')"><span class="ico">📁</span>Document Vault</a>
+      <a class="dblk" id="tab-funding" onclick="showTab('funding-db',this)"><span class="ico">💰</span>Funding</a>
+      <a class="dblk" id="tab-compliance" onclick="showTab('compliance-db',this)"><span class="ico">🔔</span>Compliance</a>
+      <a class="dblk" id="tab-ai" onclick="showTab('ai',this)"><span class="ico">🤖</span>AI Advisor</a>
+      <a class="dblk" onclick="gp('home')"><span class="ico">←</span>Back to site</a>
+    </div>
+    <div class="db-dl">
+      <h5>Upcoming Deadlines</h5>
+      <div class="dli am"><p>GST/HST Filing</p><span>Due in 14 days</span></div>
+      <div class="dli gn"><p>Business Licence Renewal</p><span>Due in 32 days</span></div>
+      <div class="dli gn"><p>Annual Corporate Return</p><span>Due in 67 days</span></div>
+    </div>
+  </div>
+  <div class="db-main">
+    <div id="db-tab-overview">
+      <div class="dbw"><h2>Welcome 👋</h2><p>Complete your profile to get started</p></div>
+      <div class="db-alert" id="db-next-alert"><div class="ai">⚡</div><div><h4 id="db-next-title">Complete your setup</h4><p id="db-next-sub">Fill out your profile to get your personalized roadmap</p></div><button class="btn-dal" id="db-next-btn" onclick="showTab('roadmap',document.getElementById('tab-roadmap'))">View Roadmap →</button></div>
+      <div class="db-panels">
+        <div class="dp">
+          <div class="dph"><h3>🗺️ My Roadmap</h3><button class="db-btn" onclick="showTab('roadmap',document.getElementById('tab-roadmap'))">View full timeline →</button></div>
+          <div class="rm-list" id="db-roadmap-mini"></div>
+        </div>
+        <div class="dp">
+          <div class="dph"><h3>📁 Document Vault</h3><button class="db-btn" onclick="openDV('vault')">View all →</button></div>
+          <div class="dg" id="db-docs-mini"></div>
+        </div>
+        <div class="dp">
+          <div class="dph"><h3>💰 Funding Matches</h3><button class="db-btn" onclick="showTab('funding-db',document.getElementById('tab-funding'))">See all →</button></div>
+          <div class="ft-tot"><p>Total you may qualify for</p><h3>$47,500</h3></div>
+          <div class="gr-list">
+            <div class="gr"><div class="gr-top"><b>Newcomer Entrepreneur Program</b><span>$22,000</span></div><div class="gr-bot"><span class="gr-m">98% match</span><span class="gr-d">Rolling deadline</span></div><button class="btn-gr" onclick="openMod('grant-det')">Start application →</button></div>
+            <div class="gr"><div class="gr-top"><b>FedDev Ontario Hospitality</b><span>$15,000</span></div><div class="gr-bot"><span class="gr-m">87% match</span><span class="gr-d">Due Mar 31</span></div><button class="btn-gr" onclick="openMod('grant-det')">Start application →</button></div>
+          </div>
+        </div>
+        <div class="dp">
+          <div class="dph"><h3>🔔 Compliance</h3><button class="db-btn" onclick="showTab('compliance-db',document.getElementById('tab-compliance'))">Full calendar →</button></div>
+          <div class="cl-list">
+            <div class="cl"><div class="cl-dot cd-am"></div><div class="cl-i"><b>GST/HST Quarterly Filing</b><span>CRA · Federal · Due March 31</span></div><span class="cl-d cda">14 days</span></div>
+            <div class="cl"><div class="cl-dot cd-gn"></div><div class="cl-i"><b>Toronto Business Licence Renewal</b><span>City of Toronto · Municipal</span></div><span class="cl-d cdg">32 days</span></div>
+            <div class="cl"><div class="cl-dot cd-gn"></div><div class="cl-i"><b>Ontario Annual Corporate Return</b><span>ServiceOntario · Provincial</span></div><span class="cl-d cdg">67 days</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="db-tab-roadmap" style="display:none">
+      <div class="dbw"><h2>🗺️ My Roadmap</h2><p>Your business · Your location</p></div>
+      <div style="background:#fff;border:1px solid var(--border);border-radius:16px;padding:28px">
+        <div class="timeline-wrap" id="db-timeline"></div>
+      </div>
+    </div>
+    <div id="db-tab-funding-db" style="display:none">
+      <div class="dbw"><h2>💰 My Funding Matches</h2><p id="db-fund-sub">Based on your profile</p></div>
+      <div style="background:var(--grad);border-radius:16px;padding:24px;margin-bottom:20px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px">
+        <div><p style="font-size:12px;color:rgba(255,255,255,.6);margin-bottom:4px">Total Available</p><p style="font-size:36px;font-weight:800;color:#fff;letter-spacing:-1.5px">$47,500</p></div>
+        <div><p style="font-size:12px;color:rgba(255,255,255,.6);margin-bottom:4px">Programs Matched</p><p style="font-size:36px;font-weight:800;color:#fff;letter-spacing:-1.5px">3</p></div>
+        <div><p style="font-size:12px;color:rgba(255,255,255,.6);margin-bottom:4px">Avg Match Score</p><p style="font-size:36px;font-weight:800;color:#fff;letter-spacing:-1.5px">92%</p></div>
+      </div>
+      <div id="funding-cards" style="display:flex;flex-direction:column;gap:14px"></div>
+    </div>
+    <div id="db-tab-compliance-db" style="display:none">
+      <div class="dbw"><h2>🔔 Compliance Calendar</h2><p>All deadlines across federal, provincial, and municipal requirements</p></div>
+      <div style="background:#fff;border:1px solid var(--border);border-radius:16px;padding:24px">
+        <div id="db-compliance-top" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px"></div>
+        <div class="cl-list" id="db-compliance-list"></div>
+      </div>
+    </div>
+
+    <div id="db-tab-ai" style="display:none">
+      <div class="dbw"><h2>🤖 AI Legal Advisor</h2><p>Ask anything about your business — regulations, documents, grants, compliance</p></div>
+      <div class="ai-chat">
+        <div class="ai-chat-msgs" id="chat-msgs">
+          <div class="msg ai">Hi! I'm your CommonCounsel AI advisor. I can help you with questions about your business — regulations, documents, grants, compliance deadlines, or anything else. What do you need?</div>
+        </div>
+        <div class="ai-starters">
+          <button class="ai-starter" onclick="aiQ(this)">What licences do I still need?</button>
+          <button class="ai-starter" onclick="aiQ(this)">When is my GST filing due?</button>
+          <button class="ai-starter" onclick="aiQ(this)">How do I apply for the Newcomer grant?</button>
+          <button class="ai-starter" onclick="aiQ(this)">Do I need a food handler certificate?</button>
+        </div>
+        <div class="ai-chat-input">
+          <input type="text" id="chat-input" placeholder="Ask about your business..." onkeydown="if(event.key==='Enter')sendChat()">
+          <button class="btn-ai-send" onclick="sendChat()"><span>Send →</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="ai-sidebar" id="ai-sidebar">
+  <div class="ai-sidebar-head">
+    <div style="display:flex;justify-content:space-between;align-items:center;width:100%">
+      <div>
+        <h3>🤖 CommonCounsel AI</h3>
+        <p>Ask anything about your business</p>
+      </div>
+      <button style="background:none;border:none;color:var(--mid);font-size:20px;cursor:pointer;padding:4px;transition:color .2s" onmouseover="this.style.color='var(--dark)'" onmouseout="this.style.color='var(--mid)'" onclick="toggleAISidebar()">✕</button>
+    </div>
+  </div>
+  <div class="ai-sidebar-msgs" id="ai-sidebar-msgs">
+    <div class="ai-msg ai"><div class="txt">Hi! Ask me about grants, documents, regulations, or compliance deadlines.</div></div>
+  </div>
+  <div class="ai-sidebar-input">
+    <input type="text" id="ai-sidebar-input" placeholder="Ask your question..." onkeydown="if(event.key==='Enter')sendSidebarChat()">
+    <button onclick="sendSidebarChat()">Send</button>
+  </div>
+</div>
+<button class="ai-toggle" id="ai-toggle" onclick="toggleAISidebar()">🤖</button>
+
+<script>
+// STATE
+let currentUser = {name:'', fullName:'', business:'', city:'', province:'', industry:'', stage:'', goals:[], demographics:[]};
+
+// ONBOARDING
+let oCur=1;
+const oL=['Business Type','Location','Your Stage','Your Goals','Your Profile'];
+function ons(n){document.getElementById('obs-'+oCur).classList.remove('active');oCur=n;document.getElementById('obs-'+n).classList.add('active');document.getElementById('ob-prog').style.width=(n/5*100)+'%';document.getElementById('ob-lbl').textContent='Step '+n+' of 5 — '+oL[n-1];window.scrollTo(0,0);}
+function osel(el){el.closest('.ob-tiles,.ob-rows').querySelectorAll('.ob-t,.ob-r').forEach(t=>t.classList.remove('sel'));el.classList.add('sel');}
+
+function finishOnboarding(){
+  const nameVal = document.getElementById('ob-name').value.trim();
+  const bizVal = document.getElementById('ob-bizname').value.trim();
+  const errEl = document.getElementById('ob-error');
+  if(!nameVal || !bizVal){ errEl.style.display='block'; return; }
+  errEl.style.display='none';
+
+  currentUser.name = nameVal.split(' ')[0];
+  currentUser.fullName = nameVal;
+  currentUser.business = bizVal;
+  const cityInput = document.querySelector('#obs-2 input[type="text"]');
+  if(cityInput && cityInput.value.trim()) currentUser.city = cityInput.value.trim();
+  const provSelect = document.querySelector('#obs-2 select');
+  if(provSelect && provSelect.value) currentUser.province = provSelect.value;
+  const selTile = document.querySelector('#obs-1 .ob-t.sel h4');
+  if(selTile) currentUser.industry = selTile.textContent.trim();
+  const selStage = document.querySelector('#obs-3 .ob-r.sel h4');
+  if(selStage) currentUser.stage = selStage.textContent.trim();
+  currentUser.goals = [...document.querySelectorAll('#obs-4 .ob-r.sel h4')].map(el=>el.textContent.trim());
+  currentUser.demographics = [...document.querySelectorAll('#obs-5 .ob-ck.sel')].map(el=>el.textContent.trim());
+  
+  populateDashboard();
+  gp('db');
+}
+
+function finishLogin(){
+  const nameVal = document.getElementById('login-name') ? document.getElementById('login-name').value.trim() : '';
+  const bizVal = document.getElementById('login-biz') ? document.getElementById('login-biz').value.trim() : '';
+  const emailVal = document.getElementById('login-email') ? document.getElementById('login-email').value.trim() : '';
+  currentUser.name = nameVal ? nameVal.split(' ')[0] : (emailVal ? emailVal.split('@')[0].replace(/[._]/g,' ') : 'there');
+  currentUser.fullName = nameVal || currentUser.name;
+  currentUser.business = bizVal || 'My Business';
+  populateDashboard();
+  gp('db');
+}
+
+// DASHBOARD
+function showTab(id, el){
+  ['overview','roadmap','funding-db','compliance-db','ai'].forEach(t=>{const d=document.getElementById('db-tab-'+t);if(d)d.style.display='none';});
+  const tab=document.getElementById('db-tab-'+id);
+  if(tab)tab.style.display='block';
+  document.querySelectorAll('.dblk').forEach(a=>a.classList.remove('active'));
+  if(el)el.classList.add('active');
+}
+
+function getProvLicenceInfo(prov){
+  const map={'Ontario':'City licence required · $195 · 1–2 weeks','British Columbia':'City of Vancouver Business Licence · ~$145 · 1–3 weeks','Alberta':'City business licence · ~$100–$300 · 1–2 weeks','Quebec':'Municipal permit required · Varies by city'};
+  return map[prov] || 'Municipal licence required · Cost varies by city · 1–3 weeks';
+}
+
+function industryEmoji(ind){
+  const map={'Food & Beverage':'🍔','Retail':'🛍️','Trades':'🔨','Health & Wellness':'💆','Tech & Creative':'💻','Hospitality':'🏨','Agriculture':'🌾','Transport':'🚚'};
+  return map[ind]||'🏢';
+}
+
+function populateDashboard(){
+  const n = currentUser.name || 'there';
+  const b = currentUser.business || 'My Business';
+  const fn = currentUser.fullName || n;
+  const loc = [currentUser.city, currentUser.province].filter(Boolean).join(', ') || 'Canada';
+  const ind = currentUser.industry || '';
+  const prov = currentUser.province || 'Ontario';
+
+  const bizEl = document.querySelector('.db-biz h4');
+  if(bizEl) bizEl.textContent = (ind ? industryEmoji(ind)+' ' : '🏢 ') + b;
+  const bizSub = document.querySelector('.db-biz p');
+  if(bizSub) bizSub.textContent = loc + (ind ? ' · ' + ind : '');
+
+  const welcome = document.querySelector('#db-tab-overview .dbw h2');
+  if(welcome) welcome.textContent = 'Welcome, ' + n + ' 👋';
+  const welcomeSub = document.querySelector('#db-tab-overview .dbw p');
+  if(welcomeSub) welcomeSub.textContent = b + ' · ' + loc;
+
+  const rmHead = document.querySelector('#db-tab-roadmap .dbw p');
+  if(rmHead) rmHead.textContent = b + ' · ' + loc + ' · Step 1 of roadmap in progress';
+
+  const fundSub = document.getElementById('db-fund-sub');
+  if(fundSub) fundSub.textContent = 'Based on your profile — ' + (ind||'Business') + ' · ' + loc;
+
+  const stage = currentUser.stage || '';
+  const alertTitle = document.getElementById('db-next-title');
+  const alertSub = document.getElementById('db-next-sub');
+  if(alertTitle && alertSub){
+    if(stage.includes('Just Getting')||stage===''){
+      alertTitle.textContent = 'First step: Register your Federal Business Number';
+      alertSub.textContent = 'Free · Same day · Required before any other registration';
+    } else if(stage.includes('Registered')){
+      alertTitle.textContent = 'Next: Apply for your Business Licence';
+      alertSub.textContent = getProvLicenceInfo(prov);
+    } else if(stage.includes('Running')){
+      alertTitle.textContent = 'Next: Check your GST/HST filing deadline';
+      alertSub.textContent = 'CRA · Quarterly · File before April 30';
+    } else {
+      alertTitle.textContent = 'Next: Review your compliance calendar';
+      alertSub.textContent = 'Stay ahead of all your renewal and filing deadlines';
+    }
+  }
+
+  buildRoadmap(b, fn, ind, prov, currentUser.city||'your city');
+  buildDocVault(b, fn, ind, prov, currentUser.city||'your city');
+  buildCompliance(prov, ind, b);
+
+  const welcomeMsg = buildWelcomeMsg();
+  chatHistory = [{role:'assistant', content: welcomeMsg}];
+  sidebarChatHistory = [{role:'assistant', content:'Hi! Ask me about grants, documents, regulations, or compliance deadlines.'}];
+  const chatMsgs = document.getElementById('chat-msgs');
+  if(chatMsgs){ chatMsgs.innerHTML=''; addMsg(welcomeMsg,'ai'); }
+}
+
+function buildRoadmap(biz, person, ind, prov, city){
+  const steps = [
+    {status:'todo', title:'Federal Business Number (BN)', tag:'fed', tagLabel:'Federal', cost:'Free', time:'Same day', link:'https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/registering-your-business/register.html', linkLabel:'CRA Business Registration →', doc:null},
+    {status:'todo', title:'GST/HST Registration (CRA)', tag:'fed', tagLabel:'Federal', cost:'Free', time:'Same day (if >$30K revenue)', link:'https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/gst-hst-businesses/account-register.html', linkLabel:'CRA GST/HST Registration →', doc:'gst'},
+  ];
+
+  if(prov==='Ontario'||!prov){
+    steps.push({status:'todo', title:'Ontario Business Registration', tag:'prov', tagLabel:'Provincial', cost:'$60', time:'Immediate', link:'https://www.ontario.ca/page/ontario-business-registry', linkLabel:'Ontario Business Registry →', doc:'ont'});
+    steps.push({status:'todo', title:`${city||'Municipal'} Business Licence`, tag:'mun', tagLabel:'Municipal', cost:'$195', time:'1–2 weeks', link:'https://www.ontario.ca/page/ontario-business-registry', linkLabel:'ServiceOntario →', doc:'licence'});
+  } else if(prov==='British Columbia'){
+    steps.push({status:'todo', title:'BC Business Name Registration', tag:'prov', tagLabel:'Provincial', cost:'$31', time:'Immediate', link:'https://www.bcregistry.gov.bc.ca', linkLabel:'BC Registries →', doc:'ont'});
+    steps.push({status:'todo', title:`${city||'City'} Business Licence`, tag:'mun', tagLabel:'Municipal', cost:'~$145', time:'1–3 weeks', link:'https://www.bcregistry.gov.bc.ca', linkLabel:'BC Registries →', doc:'licence'});
+  } else if(prov==='Alberta'){
+    steps.push({status:'todo', title:'Alberta Business Registration (NUANS)', tag:'prov', tagLabel:'Provincial', cost:'$60', time:'Immediate', link:'https://www.alberta.ca/register-business', linkLabel:'Alberta Business Registration →', doc:'ont'});
+    steps.push({status:'todo', title:`${city||'City'} Business Licence`, tag:'mun', tagLabel:'Municipal', cost:'~$150', time:'1–2 weeks', link:'https://www.alberta.ca/register-business', linkLabel:'Alberta.ca →', doc:'licence'});
+  } else {
+    steps.push({status:'todo', title:`${prov} Business Registration`, tag:'prov', tagLabel:'Provincial', cost:'Varies', time:'1–5 days', link:'https://www.canada.ca/en/services/business/start.html', linkLabel:'Canada.ca Business Registration →', doc:'ont'});
+    steps.push({status:'todo', title:`${city||'City'} Business Licence`, tag:'mun', tagLabel:'Municipal', cost:'Varies', time:'1–3 weeks', link:'https://www.canada.ca/en/services/business/start.html', linkLabel:'Canada.ca →', doc:'licence'});
+  }
+
+  if(ind==='Food & Beverage'||ind==='Hospitality'){
+    steps.push({status:'todo', title:'Food Handler Certificate', tag:'prov', tagLabel:'Provincial', cost:'$35–$80', time:'1 day', link:'https://www.canada.ca/en/public-health/services/food-safety.html', linkLabel:'Food Safety Canada →', doc:'food'});
+    steps.push({status:'todo', title:'Health Inspection', tag:'mun', tagLabel:'Municipal', cost:'Free', time:'Scheduled', link:'https://www.canada.ca/en/public-health.html', linkLabel:'Public Health Canada →', doc:null});
+  }
+  if(ind==='Trades'){
+    steps.push({status:'todo', title:'Trade Qualification / Red Seal', tag:'prov', tagLabel:'Provincial', cost:'$100–$400', time:'Varies', link:'https://www.red-seal.ca', linkLabel:'Red Seal Program →', doc:null});
+  }
+  if(ind==='Health & Wellness'){
+    steps.push({status:'todo', title:'Professional Regulatory Body Registration', tag:'prov', tagLabel:'Provincial', cost:'Varies', time:'2–6 weeks', link:'https://www.canada.ca/en/health-canada.html', linkLabel:'Health Canada →', doc:null});
+  }
+
+  steps.push({status:'todo', title:'WSIB Registration (if hiring)', tag:'prov', tagLabel:'Provincial', cost:'Premium-based', time:'Within 10 days of first hire', link:'https://www.wsib.ca/en/businesses/registering-your-business', linkLabel:'wsib.ca →', doc:'wsib'});
+  steps.push({status:'todo', title:'Articles of Incorporation (optional)', tag:'fed', tagLabel:'Federal', cost:'$200', time:'1–5 days', link:'https://ised-isde.canada.ca/site/corporations-canada/en/incorporating-federal-corporation', linkLabel:'Corporations Canada →', doc:'inc'});
+
+  if(steps.length>0) steps[0].status='current';
+
+  const tl = document.getElementById('db-timeline');
+  if(tl) tl.innerHTML = steps.map((s,i)=>{
+    const nodeClass = s.status==='done'?'done':s.status==='current'?'current':'todo';
+    const nodeLabel = s.status==='done'?'✓':s.status==='current'?'→':(i+1);
+    const statusClass = s.status==='done'?'st-done':s.status==='current'?'st-cur':'st-todo';
+    const statusLabel = s.status==='done'?'✓ Complete':s.status==='current'?'⏳ In Progress':'○ Upcoming';
+    return `<div class="tl-item">
+      <div class="tl-left"><div class="tl-node ${nodeClass}">${nodeLabel}</div></div>
+      <div class="tl-right">
+        <div class="tl-header"><span class="tl-title">${s.title}</span><span class="tl-tag ${s.tag}">${s.tagLabel}</span><span class="tl-status ${statusClass}">${statusLabel}</span></div>
+        <div class="tl-meta"><span>💰 Cost: <strong>${s.cost}</strong></span><span>⏱ Time: <strong>${s.time}</strong></span></div>
+        <a class="tl-link" href="${s.link}" target="_blank">🔗 ${s.linkLabel}</a>
+        ${s.doc?`<div style="margin-top:8px"><button onclick="openDV('${s.doc}')" style="font-size:12px;font-weight:700;background:var(--blue-l);color:var(--blue);border:none;padding:6px 14px;border-radius:100px;cursor:none;font-family:'Inter',sans-serif">Get pre-filled document →</button></div>`:''}
+      </div>
+    </div>`;
+  }).join('');
+
+  const mini = document.getElementById('db-roadmap-mini');
+  if(mini) mini.innerHTML = steps.slice(0,5).map(s=>{
+    const dotClass = s.status==='done'?'rd-ok':s.status==='current'?'rd-cur':'rd-todo';
+    const dotLabel = s.status==='done'?'✓':s.status==='current'?'→':'';
+    const tagClass = s.tag==='fed'?'rf':s.tag==='prov'?'rp':'rm';
+    return `<div class="rmi${s.status==='current'?' cur':''}"><div class="rdot ${dotClass}">${dotLabel}</div><div class="ri2"><b>${s.title}</b><span>${s.cost}</span></div><span class="rtg ${tagClass}">${s.tagLabel}</span></div>`;
+  }).join('');
+}
+
+function buildDocVault(biz, person, ind, prov, city){
+  const BIZ = biz.toUpperCase();
+  const allDocs = [
+    {id:'inc', label:'Articles of Incorporation', level:'Federal', status:'Ready', cls:'ds-ok'},
+    {id:'ont', label:`${prov||'Provincial'} Business Registration`, level:'Provincial', status:'Ready', cls:'ds-ok'},
+    {id:'licence', label:`${city||'City'} Business Licence`, level:'Municipal', status:'Pending', cls:'ds-pd'},
+    {id:'gst', label:'GST/HST Registration', level:'Federal', status:'Done', cls:'ds-ok'},
+    {id:'emp', label:'Employment Agreement', level:'Provincial', status:'Ready', cls:'ds-ok'},
+    {id:'nda', label:'Non-Disclosure Agreement', level:'General', status:'Ready', cls:'ds-ok'},
+    {id:'sha', label:'Shareholder Agreement', level:'Federal', status:'Ready', cls:'ds-ok'},
+    {id:'vendor', label:'Vendor Agreement', level:'General', status:'Ready', cls:'ds-ok'},
+    {id:'privacy', label:'PIPEDA Privacy Policy', level:'Federal', status:'Ready', cls:'ds-ok'},
+    {id:'cipo', label:'CIPO Trademark Application', level:'Federal', status:'Draft', cls:'ds-pd'},
+  ];
+
+  if(ind==='Food & Beverage'||ind==='Hospitality'){
+    allDocs.push({id:'food', label:'Food Handler Certificate App', level:'Provincial', status:'Pending', cls:'ds-pd'});
+  }
+  allDocs.push({id:'wsib', label:'WSIB Registration', level:'Provincial', status:'Ready', cls:'ds-ok'});
+
+  docs.vault.title = `📁 Document Vault — ${biz}`;
+  docs.vault.html = `<p style="font-size:14px;color:var(--mid);margin-bottom:20px;font-weight:400">All documents pre-filled with your business information. Click any to preview, then download PDF.</p><div style="display:grid;grid-template-columns:1fr 1fr;gap:9px">${allDocs.map(({id,label,level,status,cls})=>`<div onclick="openDV('${id}')" style="padding:12px;border:1px solid var(--border);border-radius:10px;cursor:none;display:flex;align-items:center;gap:8px;transition:all .2s" onmouseover="this.style.borderColor='var(--blue)';this.style.background='var(--blue-l)'" onmouseout="this.style.borderColor='var(--border)';this.style.background='#fff'"><span>📄</span><div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:700;color:var(--dark);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${label}</div><div style="font-size:10px;color:var(--light)">${level}</div></div><span style="font-size:9px;font-weight:700;padding:2px 7px;border-radius:100px;white-space:nowrap" class="${cls}">${status}</span></div>`).join('')}</div>`;
+
+  function fill(html){ return html.replace(/Pita Palace Inc\./g, biz+' Inc.').replace(/PITA PALACE INC\./g,BIZ+' INC.').replace(/PITA PALACE/g,BIZ).replace(/Pita Palace/g,biz).replace(/Amir Haddad/g,person).replace(/123 King Street West, Toronto, Ontario, M5H 1J9/g,city+(prov?', '+prov:'')+', Canada').replace(/privacy@pitapalace\.ca/g,'privacy@'+biz.toLowerCase().replace(/\s+/g,'')+'.ca').replace(/PITA PALACE \(word mark\)/g,BIZ+' (word mark)').replace(/Fast-casual Mediterranean restaurant and catering services/g,ind?ind+' business services':'Business services'); }
+  Object.keys(docs).forEach(k=>{ if(docs[k].html) docs[k].html = fill(docs[k].html); });
+
+  const miniDocs = document.getElementById('db-docs-mini');
+  if(miniDocs) miniDocs.innerHTML = allDocs.slice(0,6).map(({id,label,level,status,cls})=>`<div class="di" onclick="openDV('${id}')"><div class="di-ic">📄</div><div class="di-n"><b>${label}</b><span>${level}</span></div><span class="di-s ${cls}">${status}</span></div>`).join('');
+}
+
+function buildCompliance(prov, ind, biz){
+  const items = [
+    {label:'GST/HST Quarterly Filing', sub:'CRA · Federal · Due March 31', days:14, urgent:true, url:'https://www.canada.ca/en/revenue-agency/services/e-services/digital-services-businesses/gst-hst-netfile.html', urlLabel:'File online at CRA →'},
+    {label:'Business Licence Renewal', sub:(prov||'Municipal')+' · Annual', days:32, urgent:false, url:'https://www.canada.ca/en/services/business/permits.html', urlLabel:'Renew online →'},
+    {label:(prov||'Ontario')+' Annual Corporate Return', sub:'ServiceOntario / Provincial', days:67, urgent:false, url:'https://www.ontario.ca/page/ontario-business-registry', urlLabel:'Renew at provincial registry →'},
+    {label:'WSIB Premium Remittance', sub:'WSIB · Quarterly', days:90, urgent:false, url:'https://www.wsib.ca', urlLabel:'wsib.ca →'},
+  ];
+  if(ind==='Food & Beverage'||ind==='Hospitality'){
+    items.push({label:'Health Inspection Renewal', sub:'Public Health · Annual', days:120, urgent:false, url:'https://www.canada.ca/en/public-health.html', urlLabel:'Public Health Canada →'});
+    items.push({label:'Food Handler Certificate Renewal', sub:'Provincial · Every 5 years', days:156, urgent:false, url:'https://www.canada.ca/en/public-health/services/food-safety.html', urlLabel:'Food Safety Canada →'});
+  }
+
+  const top = document.getElementById('db-compliance-top');
+  if(top) top.innerHTML = items.slice(0,2).map(it=>`<div style="background:${it.urgent?'var(--amber-bg)':'var(--green-bg)'};border-radius:12px;padding:16px"><p style="font-size:11px;font-weight:700;color:${it.urgent?'var(--amber)':'var(--green)'};margin-bottom:2px">${it.urgent?'⚠️ URGENT':'✓ On Track'} — ${it.days} days</p><p style="font-size:14px;font-weight:700;color:var(--dark)">${it.label}</p><p style="font-size:12px;color:var(--mid)">${it.sub}</p><a href="${it.url}" target="_blank" style="font-size:11px;font-weight:700;color:${it.urgent?'var(--orange)':'var(--green)'};text-decoration:none;display:inline-block;margin-top:6px">${it.urlLabel}</a></div>`).join('');
+
+  const list = document.getElementById('db-compliance-list');
+  if(list) list.innerHTML = items.map(it=>`<div class="cl"><div class="cl-dot" style="background:${it.urgent?'#f59e0b':'#22c55e'}"></div><div class="cl-i"><b>${it.label}</b><span>${it.sub}</span></div><span class="cl-d" style="color:${it.urgent?'#f59e0b':'#22c55e'}">${it.days} days</span></div>`).join('');
+
+  const sideDl = document.querySelector('.db-dl');
+  if(sideDl) sideDl.innerHTML = `<h5>Upcoming Deadlines</h5>${items.slice(0,3).map(it=>`<div class="dli ${it.urgent?'am':'gn'}"><p>${it.label}</p><span>Due in ${it.days} days</span></div>`).join('')}`;
+}
+
+// DOCUMENTS LOGIC
+const docs={
+  vault:{title:'📁 Document Vault — Pita Palace',html:`<p style="font-size:14px;color:var(--mid);margin-bottom:20px;font-weight:400">All documents pre-filled with your business information. Click any to preview. Use the Download PDF button to save.</p><div style="display:grid;grid-template-columns:1fr 1fr;gap:9px">${[['inc','Articles of Incorporation','Federal','Ready','ds-ok'],['ont','ON Business Registration','Provincial','Ready','ds-ok'],['licence','Toronto Business Licence','Municipal','Pending','ds-pd'],['gst','GST/HST Registration','Federal','Done','ds-ok'],['emp','Employment Contract','Provincial','Ready','ds-ok'],['nda','Non-Disclosure Agreement','General','Ready','ds-ok'],['sha','Shareholder Agreement','Federal','Ready','ds-ok'],['vendor','Vendor Agreement','General','Ready','ds-ok'],['privacy','PIPEDA Privacy Policy','Federal','Ready','ds-ok'],['cipo','CIPO Trademark Application','Federal','Draft','ds-pd'],['food','Food Handler Application','Provincial','Pending','ds-pd'],['wsib','WSIB Registration','Provincial','Ready','ds-ok']].map(([id,n,l,s,c])=>`<div onclick="openDV('${id}')" style="padding:12px;border:1px solid var(--border);border-radius:10px;cursor:none;display:flex;align-items:center;gap:8px;transition:all .2s" onmouseover="this.style.borderColor='var(--blue)';this.style.background='var(--blue-l)'" onmouseout="this.style.borderColor='var(--border)';this.style.background='#fff'"><span>📄</span><div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:700;color:var(--dark);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${n}</div><div style="font-size:10px;color:var(--light)">${l}</div></div><span style="font-size:9px;font-weight:700;padding:2px 7px;border-radius:100px;white-space:nowrap" class="${c}">${s}</span></div>`).join('')}</div>`},
+
+  inc:{title:'📄 Articles of Incorporation',html:`<div class="dp-paper"><div class="dp-head"><span class="dp-wm ok">✓ Pre-filled · Ready to Submit</span><div class="dp-title">ARTICLES OF INCORPORATION</div><div class="dp-sub">Canada Business Corporations Act · Form 1</div></div><div class="dp-sec">Corporate Information</div><div class="dp-field"><div class="dp-lbl">1. Name of Corporation</div><div class="dp-val">PITA PALACE INC.</div></div><div class="dp-field"><div class="dp-lbl">2. Province of Registered Office</div><div class="dp-val">Ontario</div></div><div class="dp-field"><div class="dp-lbl">3. Registered Office Address</div><div class="dp-val">123 King Street West, Toronto, Ontario, M5H 1J9</div></div><div class="dp-sec">Share Structure</div><div class="dp-field"><div class="dp-lbl">4. Classes of Shares</div><div class="dp-val">Common Shares — Unlimited number authorized</div></div><div class="dp-field"><div class="dp-lbl">5. Restrictions on Share Transfers</div><div class="dp-val">None</div></div><div class="dp-sec">Directors</div><div class="dp-field"><div class="dp-lbl">6. Number of Directors</div><div class="dp-val">Minimum: 1 · Maximum: 10</div></div><div class="dp-field"><div class="dp-lbl">7. First Director</div><div class="dp-val">Amir Haddad · 123 King Street West, Toronto, ON, M5H 1J9</div></div><div class="dp-sec">Provisions</div><div class="dp-clause">The business of the corporation is not restricted. The corporation may engage in any lawful business.</div><div class="dp-clause">The directors may, by resolution, make, amend or repeal any by-laws that regulate the business or affairs of the corporation.</div><div class="dp-sig"><div><div class="dp-sig-ln">Signature of Incorporator</div><div style="margin-top:20px;font-size:12px">Amir Haddad</div></div><div><div class="dp-sig-ln">Date</div><div style="margin-top:20px;font-size:12px">March 8, 2026</div></div></div><div class="dp-submit-box"><h4>📋 Where to Submit</h4><p><strong>Corporations Canada</strong> — Online via Corporations Canada portal or by mail to Corporations Canada, Innovation, Science and Economic Development Canada, Ottawa ON K1A 0C9</p><p><strong>Fee:</strong> $200 online · <strong>Processing:</strong> 1–5 business days · <strong>Deadline:</strong> Before conducting business</p><a class="dp-submit-link" href="https://ised-isde.canada.ca/site/corporations-canada/en/incorporating-federal-corporation" target="_blank">🔗 Submit at Corporations Canada →</a></div><div class="dp-note">Pre-filled by CommonCounsel. Review all fields before submitting.</div></div>`},
+
+  ont:{title:'📄 Ontario Business Name Registration',html:`<div class="dp-paper"><div class="dp-head"><span class="dp-wm ok">✓ Pre-filled · Ready to Submit</span><div class="dp-title">BUSINESS NAME REGISTRATION</div><div class="dp-sub">Ontario Business Registry · ServiceOntario</div></div><div class="dp-sec">Business Information</div><div class="dp-field"><div class="dp-lbl">Business Name</div><div class="dp-val">PITA PALACE</div></div><div class="dp-field"><div class="dp-lbl">Business Activity</div><div class="dp-val">Fast-casual Mediterranean restaurant and catering services</div></div><div class="dp-field"><div class="dp-lbl">Business Address</div><div class="dp-val">123 King Street West, Toronto, Ontario, M5H 1J9</div></div><div class="dp-sec">Registrant Information</div><div class="dp-field"><div class="dp-lbl">Full Legal Name</div><div class="dp-val">Amir Haddad</div></div><div class="dp-field"><div class="dp-lbl">Registration Period</div><div class="dp-val">5 years (renewable)</div></div><div class="dp-sig"><div><div class="dp-sig-ln">Registrant Signature</div><div style="margin-top:20px;font-size:12px">Amir Haddad</div></div><div><div class="dp-sig-ln">Date</div><div style="margin-top:20px;font-size:12px">March 8, 2026</div></div></div><div class="dp-submit-box"><h4>📋 Where to Submit</h4><p><strong>Ontario Business Registry (ServiceOntario)</strong> — Online at ontario.ca or in person at a ServiceOntario centre</p><p><strong>Fee:</strong> $60 · <strong>Processing:</strong> Immediate online · <strong>Renewal:</strong> Every 5 years</p><a class="dp-submit-link" href="https://www.ontario.ca/page/ontario-business-registry" target="_blank">🔗 Submit at Ontario Business Registry →</a></div><div class="dp-note">File online at Ontario Business Registry. Fee: $60. Processing: Immediate.</div></div>`},
+
+  licence:{title:'📄 Toronto Business Licence Application',html:`<div class="dp-paper"><div class="dp-head"><span class="dp-wm pd">⏳ In Progress · Review Required</span><div class="dp-title">BUSINESS LICENCE APPLICATION</div><div class="dp-sub">City of Toronto · Municipal Licensing &amp; Standards</div></div><div class="dp-sec">Business Details</div><div class="dp-field"><div class="dp-lbl">Business Name</div><div class="dp-val">Pita Palace</div></div><div class="dp-field"><div class="dp-lbl">Business Type</div><div class="dp-val">Food Service Establishment</div></div><div class="dp-field"><div class="dp-lbl">Business Address</div><div class="dp-val">123 King Street West, Toronto, Ontario, M5H 1J9</div></div><div class="dp-sec">Owner Information</div><div class="dp-field"><div class="dp-lbl">Owner / Operator</div><div class="dp-val">Amir Haddad</div></div><div class="dp-sec">Required Attachments</div><div class="dp-clause">☑ Proof of business registration (attached)</div><div class="dp-clause">☑ Zoning compliance confirmation</div><div class="dp-clause">☐ Food Handler Certificate (required before approval)</div><div class="dp-clause">☐ Health Inspection approval (Toronto Public Health will contact)</div><div style="background:var(--amber-bg);border-radius:10px;padding:14px;margin-top:16px"><p style="font-size:13px;font-weight:700;color:var(--amber);margin-bottom:3px">⚠️ 2 items required before approval</p><p style="font-size:12px;color:var(--amber);font-weight:400">Complete Food Handler Certificate and await Health Inspection scheduling.</p></div><div class="dp-submit-box"><h4>📋 Where to Submit</h4><p><strong>City of Toronto — Municipal Licensing &amp; Standards</strong> — Online at toronto.ca/business-licences or in person at 850 Coxwell Ave</p><p><strong>Fee:</strong> $195 · <strong>Processing:</strong> 1–2 weeks · <strong>Deadline:</strong> Before opening for business · <strong>Renewal:</strong> Annual</p><a class="dp-submit-link" href="https://www.toronto.ca/business-economy/business-operation-growth/business-licences-and-permits/" target="_blank">🔗 Apply at City of Toronto →</a></div></div>`},
+
+  gst:{title:'📄 GST/HST Registration',html:`<div class="dp-paper"><div class="dp-head"><span class="dp-wm dn">✓ Submitted · Registered</span><div class="dp-title">GST/HST REGISTRATION</div><div class="dp-sub">Canada Revenue Agency · Form RC1</div></div><div class="dp-sec">Registration Details</div><div class="dp-field"><div class="dp-lbl">Business Name</div><div class="dp-val">PITA PALACE INC.</div></div><div class="dp-field"><div class="dp-lbl">Business Number (BN)</div><div class="dp-val">123456789 RT0001</div></div><div class="dp-field"><div class="dp-lbl">Registration Date</div><div class="dp-val">March 1, 2026</div></div><div class="dp-field"><div class="dp-lbl">Reporting Period</div><div class="dp-val">Quarterly (January 1 – March 31)</div></div><div class="dp-sec">Tax Rates (Ontario)</div><div class="dp-clause">HST Rate: 13% (5% federal GST + 8% Ontario PST component)</div><div class="dp-clause">First filing due: April 30, 2026</div><div class="dp-clause">Zero-rated: Basic groceries, certain food items for resale</div><div style="background:var(--green-bg);border-radius:10px;padding:14px;margin-top:16px"><p style="font-size:13px;font-weight:700;color:var(--green)">✓ Successfully registered with CRA</p></div><div class="dp-submit-box"><h4>📋 Filing Information</h4><p><strong>Next filing due:</strong> April 30, 2026 (Q1 2026) · <strong>File via:</strong> CRA My Business Account or GST/HST NETFILE</p><p>Your GST/HST number must appear on all invoices over $30. Failure to collect and remit can result in penalties.</p><a class="dp-submit-link" href="https://www.canada.ca/en/revenue-agency/services/e-services/digital-services-businesses/gst-hst-netfile.html" target="_blank">🔗 File at CRA NETFILE →</a></div></div>`},
+
+  emp:{title:'📄 Employment Agreement',html:`<div class="dp-paper"><div class="dp-head"><span class="dp-wm ok">✓ Pre-filled · Ready to Use</span><div class="dp-title">EMPLOYMENT AGREEMENT</div><div class="dp-sub">Province of Ontario · Employment Standards Act Compliant</div></div><div class="dp-sec">Parties</div><div class="dp-field"><div class="dp-lbl">Employer</div><div class="dp-val">Pita Palace Inc., 123 King Street West, Toronto, Ontario, M5H 1J9</div></div><div class="dp-field"><div class="dp-lbl">Employee</div><div class="dp-val">[Employee Full Name] — complete before signing</div></div><div class="dp-field"><div class="dp-lbl">Position</div><div class="dp-val">[Job Title] — complete before signing</div></div><div class="dp-sec">Terms of Employment</div><div class="dp-field"><div class="dp-lbl">Employment Type</div><div class="dp-val">Full-time · Permanent</div></div><div class="dp-field"><div class="dp-lbl">Start Date</div><div class="dp-val">[Start Date] — complete before signing</div></div><div class="dp-field"><div class="dp-lbl">Compensation</div><div class="dp-val">$[Hourly/Annual] — minimum Ontario wage: $17.20/hr (2026)</div></div><div class="dp-sec">Key Clauses</div><div class="dp-clause">The Employee will devote their full working time and attention to the performance of the duties assigned by the Employer.</div><div class="dp-clause">Either party may terminate this Agreement on [X] weeks notice, subject to the minimums required by the Employment Standards Act, 2000.</div><div class="dp-clause">The Employee will keep all business information, customer data, and trade secrets strictly confidential during and after employment.</div><div class="dp-sig"><div><div class="dp-sig-ln">Employer Signature</div><div style="margin-top:20px;font-size:12px">Amir Haddad, Pita Palace Inc.</div></div><div><div class="dp-sig-ln">Employee Signature</div><div style="margin-top:20px;font-size:12px">[Employee Name]</div></div></div><div class="dp-submit-box"><h4>📋 Requirements</h4><p><strong>No government filing required</strong> — sign and keep a copy for your records. Must be provided to employee on or before their first day of work.</p><p><strong>Ontario minimum wage (2026):</strong> $17.20/hr general · Must comply with the Employment Standards Act, 2000</p><a class="dp-submit-link" href="https://www.ontario.ca/document/your-guide-employment-standards-act-0" target="_blank">🔗 Ontario Employment Standards Act Guide →</a></div><div class="dp-note">Compliant with Ontario ESA 2000. Consult an employment lawyer for complex situations.</div></div>`},
+
+  nda:{title:'📄 Non-Disclosure Agreement',html:`<div class="dp-paper"><div class="dp-head"><span class="dp-wm ok">✓ Pre-filled · Ready to Use</span><div class="dp-title">NON-DISCLOSURE AGREEMENT</div><div class="dp-sub">Mutual Confidentiality Agreement</div></div><div class="dp-sec">Parties</div><div class="dp-field"><div class="dp-lbl">Disclosing Party</div><div class="dp-val">Pita Palace Inc.</div></div><div class="dp-field"><div class="dp-lbl">Receiving Party</div><div class="dp-val">[Counterparty Name] — complete before signing</div></div><div class="dp-sec">Confidential Information</div><div class="dp-clause">Confidential Information means any data or information that is proprietary to Pita Palace Inc. and not generally known to the public, including business plans, financial projections, customer lists, recipes, supplier agreements, and operational processes.</div><div class="dp-sec">Obligations</div><div class="dp-clause">The Receiving Party agrees to hold all Confidential Information in strict confidence, to use the Confidential Information only for the purpose of evaluating a potential business relationship, and not to disclose Confidential Information to any third party without prior written consent.</div><div class="dp-field"><div class="dp-lbl">Duration of Confidentiality</div><div class="dp-val">2 years from date of disclosure</div></div><div class="dp-sig"><div><div class="dp-sig-ln">Pita Palace Inc.</div><div style="margin-top:20px;font-size:12px">Amir Haddad</div></div><div><div class="dp-sig-ln">Receiving Party</div><div style="margin-top:20px;font-size:12px">[Counterparty]</div></div></div><div class="dp-submit-box"><h4>📋 How to Use</h4><p><strong>No government filing required.</strong> Sign both copies, keep one, give one to the receiving party. For maximum enforceability, have each signature witnessed or notarized.</p><a class="dp-submit-link" href="https://www.ic.gc.ca/eic/site/061.nsf/eng/h_rd01060.html" target="_blank">🔗 ISED Trade Secrets Guide →</a></div><div class="dp-note">General NDA template. For complex arrangements, consult a business lawyer.</div></div>`},
+
+  sha:{title:'📄 Shareholder Agreement',html:`<div class="dp-paper"><div class="dp-head"><span class="dp-wm ok">✓ Template · Customize Before Use</span><div class="dp-title">SHAREHOLDER AGREEMENT</div><div class="dp-sub">Pita Palace Inc. — Federal Corporation</div></div><div class="dp-sec">Shareholders</div><div class="dp-field"><div class="dp-lbl">Shareholder 1</div><div class="dp-val">Amir Haddad — [X]% of issued common shares</div></div><div class="dp-field"><div class="dp-lbl">Shareholder 2</div><div class="dp-val">[Name] — [X]% of issued common shares — complete if applicable</div></div><div class="dp-sec">Key Provisions</div><div class="dp-clause">The shareholders agree to vote their shares to elect the directors as set out in this Agreement.</div><div class="dp-clause">No shareholder shall transfer, sell, or assign their shares without first offering them to the other shareholders (right of first refusal).</div><div class="dp-clause">Major decisions including new share issuance, asset sale, and debt over $50,000 require unanimous shareholder consent.</div><div class="dp-submit-box"><h4>📋 Requirements</h4><p><strong>No government filing required</strong> — this is a private agreement among shareholders. Highly recommended to have a corporate lawyer review before signing.</p><p><strong>Keep with:</strong> Corporate minute book and records book.</p><a class="dp-submit-link" href="https://ised-isde.canada.ca/site/corporations-canada/en/maintaining-your-federal-corporation/corporate-records" target="_blank">🔗 Corporations Canada Corporate Records →</a></div><div class="dp-note">Template only. Have a corporate lawyer review before use.</div></div>`},
+
+  vendor:{title:'📄 Vendor Agreement',html:`<div class="dp-paper"><div class="dp-head"><span class="dp-wm ok">✓ Pre-filled · Ready to Use</span><div class="dp-title">VENDOR / SUPPLIER AGREEMENT</div><div class="dp-sub">General Commercial Contract</div></div><div class="dp-sec">Parties</div><div class="dp-field"><div class="dp-lbl">Buyer</div><div class="dp-val">Pita Palace Inc.</div></div><div class="dp-field"><div class="dp-lbl">Vendor / Supplier</div><div class="dp-val">[Vendor Name] — complete before signing</div></div><div class="dp-sec">Terms</div><div class="dp-field"><div class="dp-lbl">Products / Services</div><div class="dp-val">[Description of goods or services]</div></div><div class="dp-field"><div class="dp-lbl">Payment Terms</div><div class="dp-val">Net 30 days from invoice date</div></div><div class="dp-field"><div class="dp-lbl">Delivery Terms</div><div class="dp-val">[Delivery schedule and location]</div></div><div class="dp-clause">The Vendor warrants that all goods supplied conform to the agreed specifications and are free from defects in material and workmanship.</div><div class="dp-submit-box"><h4>📋 How to Use</h4><p><strong>No government filing required.</strong> Both parties sign; keep a copy. For purchases over $10,000, consider having a lawyer review.</p></div><div class="dp-note">Customize payment terms and delivery details before use.</div></div>`},
+
+  privacy:{title:'📄 PIPEDA Privacy Policy',html:`<div class="dp-paper"><div class="dp-head"><span class="dp-wm ok">✓ Pre-filled · PIPEDA Compliant</span><div class="dp-title">PRIVACY POLICY</div><div class="dp-sub">Pita Palace Inc. · Personal Information Protection and Electronic Documents Act</div></div><div class="dp-sec">Collection of Personal Information</div><div class="dp-clause">Pita Palace Inc. collects personal information such as names, email addresses, phone numbers, and payment information only when voluntarily provided by customers for the purpose of fulfilling orders, reservations, and communications.</div><div class="dp-sec">Use of Information</div><div class="dp-clause">We use collected information only for the purposes for which it was collected: processing orders, sending confirmations, responding to inquiries, and with consent, sending promotional communications.</div><div class="dp-sec">Protection &amp; Retention</div><div class="dp-clause">We protect personal information with appropriate technical and organizational safeguards. Data is retained only as long as necessary for the stated purposes or as required by law.</div><div class="dp-field"><div class="dp-lbl">Privacy Officer</div><div class="dp-val">Amir Haddad · privacy@pitapalace.ca</div></div><div class="dp-submit-box"><h4>📋 Requirements</h4><p><strong>No government registration required.</strong> Must be posted on your website and available to customers on request. Review and update annually or when data practices change.</p><a class="dp-submit-link" href="https://www.priv.gc.ca/en/privacy-topics/privacy-laws-in-canada/the-personal-information-protection-and-electronic-documents-act-pipeda/" target="_blank">🔗 OPC PIPEDA Guide →</a></div><div class="dp-note">Review annually. Update when data practices change.</div></div>`},
+
+  cipo:{title:'📄 CIPO Trademark Application',html:`<div class="dp-paper"><div class="dp-head"><span class="dp-wm pd">📝 Draft · Review Before Filing</span><div class="dp-title">TRADEMARK APPLICATION</div><div class="dp-sub">Canadian Intellectual Property Office · Form TM-APPL</div></div><div class="dp-sec">Applicant</div><div class="dp-field"><div class="dp-lbl">Applicant Name</div><div class="dp-val">Pita Palace Inc.</div></div><div class="dp-field"><div class="dp-lbl">Address</div><div class="dp-val">123 King Street West, Toronto, Ontario, M5H 1J9</div></div><div class="dp-sec">Trademark Details</div><div class="dp-field"><div class="dp-lbl">Trademark</div><div class="dp-val">PITA PALACE (word mark)</div></div><div class="dp-field"><div class="dp-lbl">Nice Classification</div><div class="dp-val">Class 43 — Food and drink services, restaurant services</div></div><div class="dp-field"><div class="dp-lbl">Basis for Application</div><div class="dp-val">Use in Canada — since March 2026</div></div><div class="dp-submit-box"><h4>📋 Where to Submit</h4><p><strong>Canadian Intellectual Property Office (CIPO)</strong> — Online via CIPO's Trademark e-filing system</p><p><strong>Fee:</strong> $458 online (first class) · <strong>Processing:</strong> 12–18 months · <strong>Duration:</strong> 10 years, renewable · <strong>Deadline:</strong> File before using mark commercially when possible</p><a class="dp-submit-link" href="https://www.ic.gc.ca/eic/site/cipointernet-internetopic.nsf/eng/h_wr04234.html" target="_blank">🔗 File at CIPO Trademark e-filing →</a></div><div class="dp-note">Conduct a clearance search before filing. Consider a trademark lawyer for complex marks.</div></div>`},
+
+  food:{title:'📄 Food Handler Certificate Application',html:`<div class="dp-paper"><div class="dp-head"><span class="dp-wm pd">⏳ Pending · Must Complete Training</span><div class="dp-title">FOOD HANDLER CERTIFICATION</div><div class="dp-sub">Province of Ontario · Health Protection and Promotion Act</div></div><div class="dp-sec">Applicant</div><div class="dp-field"><div class="dp-lbl">Name</div><div class="dp-val">Amir Haddad</div></div><div class="dp-field"><div class="dp-lbl">Business</div><div class="dp-val">Pita Palace Inc.</div></div><div class="dp-sec">Certification Requirements</div><div class="dp-clause">At least one person with a valid Food Handler Certificate must be on the premises at all times of operation.</div><div class="dp-clause">The certificate is obtained by completing an approved food safety training course and passing the examination with a score of 70% or higher.</div><div class="dp-field"><div class="dp-lbl">Approved Training Providers</div><div class="dp-val">City of Toronto, SafeCheck, National Food Safety Training Program</div></div><div class="dp-submit-box"><h4>📋 Where to Get Certified</h4><p><strong>Toronto Public Health</strong> offers Food Handler Certification courses. Also available via SafeCheck, FoodSafe, and NFSTP online.</p><p><strong>Cost:</strong> $35–$80 depending on provider · <strong>Duration:</strong> ~8 hour course · <strong>Deadline:</strong> Required before business licence approval · <strong>Validity:</strong> 5 years</p><a class="dp-submit-link" href="https://www.toronto.ca/community-people/health-wellness-care/health-programs-advice/food-safety/food-handler-certification/" target="_blank">🔗 Toronto Food Handler Certification →</a></div><div style="background:var(--amber-bg);border-radius:10px;padding:14px;margin-top:16px"><p style="font-size:13px;font-weight:700;color:var(--amber)">⚠️ Required before business licence approval</p></div></div>`},
+
+  wsib:{title:'📄 WSIB Registration',html:`<div class="dp-paper"><div class="dp-head"><span class="dp-wm ok">✓ Pre-filled · Ready to Submit</span><div class="dp-title">WORKPLACE SAFETY AND INSURANCE BOARD REGISTRATION</div><div class="dp-sub">Province of Ontario · WSIB</div></div><div class="dp-sec">Employer Information</div><div class="dp-field"><div class="dp-lbl">Business Name</div><div class="dp-val">Pita Palace Inc.</div></div><div class="dp-field"><div class="dp-lbl">CRA Business Number</div><div class="dp-val">123456789</div></div><div class="dp-field"><div class="dp-lbl">Industry Classification</div><div class="dp-val">Food Services — Class G · Rate Group 623</div></div><div class="dp-field"><div class="dp-lbl">Expected Annual Payroll</div><div class="dp-val">$[Annual payroll] — complete before submitting</div></div><div class="dp-sec">WSIB Premium</div><div class="dp-clause">Premium rate for food services: approximately $1.17 per $100 of insurable earnings.</div><div class="dp-clause">Registration must be completed within 10 days of hiring your first employee.</div><div class="dp-submit-box"><h4>📋 Where to Submit</h4><p><strong>WSIB Ontario</strong> — Register online at wsib.ca using your CRA Business Number</p><p><strong>Fee:</strong> Premium based on payroll (approx. $1.17/$100) · <strong>Deadline:</strong> Within 10 days of first hire · <strong>Penalty for late registration:</strong> 2× premium owed</p><a class="dp-submit-link" href="https://www.wsib.ca/en/businesses/registering-your-business" target="_blank">🔗 Register at wsib.ca →</a></div><div class="dp-note">Mandatory for most Ontario employers. Failure to register results in significant penalties.</div></div>`}
+};
+
+// GRANTS LOGIC
+const grants=[
+  {name:'Canada Small Business Financing Program',amount:'Up to $1,150,000',type:'federal',tag:'🇨🇦 Federal',desc:'Government-backed loans for equipment, leasehold improvements, and real property.',deadline:'Rolling',match:85,url:'https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/changes-your-business/government-assistance-subsidy.html',apply:'https://ised-isde.canada.ca/site/canada-small-business-financing-program/en'},
+  {name:'Canada Digital Adoption Program (CDAP)',amount:'Up to $15,000',type:'federal tech',tag:'💻 Federal Tech',desc:'Grant for adopting digital tools, e-commerce, and technology modernization.',deadline:'Apr 15, 2026',match:92,url:'https://ised-isde.canada.ca/site/canada-digital-adoption-program/en',apply:'https://ised-isde.canada.ca/site/canada-digital-adoption-program/en/boost-your-business-technology'},
+  {name:'CanExport SMEs',amount:'Up to $50,000',type:'federal',tag:'🇨🇦 Federal',desc:'Funding to help small businesses develop new export markets internationally.',deadline:'Rolling',match:70,url:'https://www.tradecommissioner.gc.ca/funding-financement/canexport/sme-pme/index.aspx?lang=eng',apply:'https://www.tradecommissioner.gc.ca/funding-financement/canexport/sme-pme/index.aspx?lang=eng'},
+  {name:'BDC Small Business Loans',amount:'Up to $100,000',type:'federal',tag:'🇨🇦 Federal',desc:'Flexible financing for small businesses from Canada\'s business development bank.',deadline:'Rolling',match:88,url:'https://www.bdc.ca/en/financing',apply:'https://www.bdc.ca/en/financing/business-loans/small-business-loan'},
+  {name:'NRC IRAP',amount:'Up to $500,000',type:'federal tech',tag:'💻 Tech',desc:'Industrial Research Assistance Program for innovative and tech-focused SMEs.',deadline:'Rolling',match:65,url:'https://nrc.canada.ca/en/support-technology-innovation/nrc-irap',apply:'https://nrc.canada.ca/en/support-technology-innovation/nrc-irap'},
+  {name:'FedDev Ontario',amount:'Up to $100,000',type:'regional',tag:'🗺️ Ontario',desc:'Southern Ontario-specific funding for economic development and growth.',deadline:'Mar 31, 2026',match:87,url:'https://www.feddevontario.gc.ca/eic/site/723.nsf/eng/home',apply:'https://www.feddevontario.gc.ca/eic/site/723.nsf/eng/00121.html'},
+  {name:'PacifiCan',amount:'Up to $200,000',type:'regional',tag:'🗺️ BC',desc:'Pacific Economic Development Canada funding for BC-based businesses.',deadline:'Rolling',match:75,url:'https://www.pacific.gc.ca/en',apply:'https://www.pacific.gc.ca/en/funding'},
+  {name:'ACOA Atlantic Fund',amount:'Up to $75,000',type:'regional',tag:'🗺️ Atlantic',desc:'Atlantic Canada Opportunities Agency business development funding.',deadline:'Rolling',match:72,url:'https://www.acoa-apec.ca/en',apply:'https://www.acoa-apec.ca/en/business/funding'},
+  {name:'Women Entrepreneurship Strategy (WES)',amount:'Up to $100,000',type:'women',tag:'👩 Women',desc:'Federal program dedicated to helping women-owned businesses grow and scale.',deadline:'Rolling',match:90,url:'https://ised-isde.canada.ca/site/women-entrepreneurship-strategy/en',apply:'https://ised-isde.canada.ca/site/women-entrepreneurship-strategy/en/wes-ecosystem-fund'},
+  {name:'BDC Women in Tech',amount:'Up to $250,000',type:'women tech',tag:'👩 Women Tech',desc:'Dedicated financing for women-led tech businesses.',deadline:'Rolling',match:80,url:'https://www.bdc.ca/en/about/diversity-inclusion/women-entrepreneurs',apply:'https://www.bdc.ca/en/about/diversity-inclusion/women-entrepreneurs'},
+  {name:'Black Entrepreneurship Program',amount:'Up to $250,000',type:'indigenous',tag:'🧑‍🦱 Minority',desc:'Federal program supporting Black business owners in Canada.',deadline:'Rolling',match:85,url:'https://ised-isde.canada.ca/site/black-entrepreneurship-program/en',apply:'https://ised-isde.canada.ca/site/black-entrepreneurship-program/en/black-entrepreneurship-loan-fund'},
+  {name:'NACCA Indigenous Capital',amount:'Up to $150,000',type:'indigenous',tag:'🪶 Indigenous',desc:'National Aboriginal Capital Corporations Association financing for Indigenous entrepreneurs.',deadline:'Rolling',match:88,url:'https://www.nacca.ca',apply:'https://www.nacca.ca/financing/'},
+  {name:'Ontario Newcomer Entrepreneur Fund',amount:'Up to $22,000',type:'newcomer',tag:'🌍 Newcomer',desc:'Non-repayable grants for newcomer and immigrant entrepreneurs in Ontario.',deadline:'Rolling',match:95,url:'https://www.ontario.ca/page/newcomer-entrepreneur-support',apply:'https://www.ontario.ca/page/newcomer-entrepreneur-support'},
+  {name:'Futurpreneur Canada',amount:'Up to $15,000',type:'youth',tag:'🧑 Youth',desc:'Financing and mentorship for entrepreneurs aged 18–39, with BDC co-lending.',deadline:'Rolling',match:82,url:'https://www.futurpreneur.ca/en/',apply:'https://www.futurpreneur.ca/en/get-started/'},
+  {name:'Rural Economic Development Fund',amount:'Up to $50,000',type:'regional',tag:'🌄 Rural',desc:'Ontario funding for businesses in rural communities and small towns.',deadline:'Rolling',match:78,url:'https://www.ontario.ca/page/rural-economic-development-program',apply:'https://www.ontario.ca/page/rural-economic-development-program'},
+];
+
+(function renderFundingCards(){
+  const fc = [
+    ['Newcomer Entrepreneur Program','$22,000','98%','Rolling deadline','Non-repayable grant for newcomer and immigrant entrepreneurs in Ontario.','https://www.ontario.ca/page/newcomer-entrepreneur-support'],
+    ['FedDev Ontario — Food & Hospitality','$15,000','87%','Due Mar 31, 2026','Regional development funding for food service businesses in southern Ontario.','https://www.feddevontario.gc.ca/eic/site/723.nsf/eng/home'],
+    ['Canada Digital Adoption Program (CDAP)','$10,500','92%','Due Apr 15, 2026','Federal grant to help small businesses adopt digital tools and e-commerce.','https://ised-isde.canada.ca/site/canada-digital-adoption-program/en']
+  ];
+  const container = document.getElementById('funding-cards');
+  if(!container) return;
+  container.innerHTML = fc.map(([n,a,m,d,desc,url]) => `
+    <div style="background:#fff;border:1px solid var(--border);border-radius:14px;padding:20px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
+        <div>
+          <p style="font-size:15px;font-weight:700;color:var(--dark);margin-bottom:4px">${n}</p>
+          <p style="font-size:13px;color:var(--mid)">${desc}</p>
+        </div>
+        <div style="text-align:right;flex-shrink:0;margin-left:16px">
+          <p style="font-size:24px;font-weight:800;color:var(--green);letter-spacing:-1px">${a}</p>
+          <p style="font-size:11px;color:var(--light)">${d}</p>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;margin-bottom:12px">
+        <span style="font-size:10px;font-weight:700;background:var(--green-bg);color:var(--green);padding:3px 9px;border-radius:100px">${m} match</span>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button onclick="openMod('grant-det')" style="flex:1;padding:9px;background:var(--dark);color:#fff;border:none;border-radius:100px;font-size:12px;font-weight:700;cursor:none;font-family:'Inter',sans-serif" onmouseover="this.style.background='var(--blue)'" onmouseout="this.style.background='var(--dark)'">Start pre-filled application →</button>
+        <a href="${url}" target="_blank" style="padding:9px 16px;border:1.5px solid var(--border);border-radius:100px;font-size:12px;font-weight:700;color:var(--blue);text-decoration:none;white-space:nowrap">Official site 🔗</a>
+      </div>
+    </div>`).join('');
+})();
+
+function renderGrants(filter){
+  const grid=document.getElementById('grant-grid');
+  if(!grid)return;
+  const filtered=filter==='all'?grants:grants.filter(g=>g.type.includes(filter));
+  grid.innerHTML=filtered.map(g=>`
+    <div class="grant-card">
+      <div class="gc-top">
+        <div class="gc-badges"><span class="gc-badge" style="background:var(--blue-l);color:var(--blue)">${g.tag}</span></div>
+        <div class="gc-amount">${g.amount}</div>
+        <div class="gc-name">${g.name}</div>
+        <div class="gc-desc">${g.desc}</div>
+        <div class="match-bar" style="margin-top:10px"><div class="match-fill" style="width:${g.match}%"></div></div>
+        <div style="font-size:10px;color:var(--light);margin-top:3px">${g.match}% eligibility match</div>
+      </div>
+      <div class="gc-mid">
+        <div class="gc-row"><span>Deadline</span><strong>${g.deadline}</strong></div>
+        <div class="gc-row"><span>Type</span><strong>${g.type.includes('federal')?'Non-repayable Grant / Loan':'Grant'}</strong></div>
+      </div>
+      <div class="gc-bot">
+        <button class="btn-gc-apply" onclick="window.open('${g.apply}','_blank')"><span>Apply at official site 🔗</span></button>
+        <button class="btn-gc-info" onclick="window.open('${g.url}','_blank')">Info</button>
+      </div>
+    </div>`).join('');
+}
+
+function filterGrants(btn,filter){
+  document.querySelectorAll('.ff-pill').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderGrants(filter);
+}
+
+function runEligibility(){
+  const prov=document.getElementById('elig-prov').value;
+  const selected=document.querySelectorAll('#page-eligibility .elig-ck.sel');
+  const profiles=[...selected].map(el=>el.textContent.trim());
+  const results=document.getElementById('elig-results');
+  const matchesEl=document.getElementById('elig-matches');
+  const matched=[];
+  let total=0;
+  if(profiles.some(p=>p.includes('Newcomer'))){matched.push({n:'Ontario Newcomer Entrepreneur Fund',a:'$22,000',m:'98%'});total+=22000;}
+  if(profiles.some(p=>p.includes('Woman'))){matched.push({n:'Women Entrepreneurship Strategy (WES)',a:'$50,000',m:'90%'});total+=50000;}
+  if(profiles.some(p=>p.includes('Youth'))){matched.push({n:'Futurpreneur Canada',a:'$15,000',m:'82%'});total+=15000;}
+  if(profiles.some(p=>p.includes('Indigenous'))){matched.push({n:'NACCA Indigenous Capital',a:'$150,000',m:'88%'});total+=150000;}
+  if(profiles.some(p=>p.includes('minority'))){matched.push({n:'Black Entrepreneurship Program',a:'$250,000',m:'85%'});total+=250000;}
+  matched.push({n:'Canada Digital Adoption Program',a:'$15,000',m:'92%'});total+=15000;
+  matched.push({n:'BDC Small Business Loan',a:'$100,000',m:'85%'});total+=100000;
+  if(prov==='Ontario'||prov===''){matched.push({n:'FedDev Ontario',a:'$50,000',m:'87%'});total+=50000;}
+  document.getElementById('elig-total').textContent='$'+total.toLocaleString();
+  document.getElementById('elig-count').textContent=`Based on your profile, you match ${matched.length} programs:`;
+  matchesEl.innerHTML=matched.map(m=>`<div class="er-item"><span class="er-item-name">${m.n}</span><span style="font-size:10px;color:rgba(255,255,255,.5);margin-right:8px">${m.m}</span><span class="er-item-amt">${m.a}</span></div>`).join('');
+  results.classList.add('show');
+  results.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+// AI CHAT LOGIC
+function buildSystem(){
+  const n=currentUser?.name||'there';
+  const b=currentUser?.business||'your business';
+  const city=currentUser?.city||'your city';
+  const prov=currentUser?.province||'your province';
+  const ind=currentUser?.industry||'general business';
+  const stage=currentUser?.stage||'';
+  const goals=(currentUser?.goals||[]).join(', ')||'grow their business';
+  const demo=(currentUser?.demographics||[]).join(', ')||'';
+  return `You are the CommonCounsel AI Legal Advisor for Canadian small businesses. The user is ${n}, owner of ${b}, a ${ind} business located in ${city}, ${prov}.
+${stage?'Business stage: '+stage+'.':''}
+${goals?'Their goals: '+goals+'.':''}
+${demo?'Demographics/special programs applicable: '+demo+'.':''}
+
+You help with:
+- Business registration and licensing requirements (federal, provincial, municipal)
+- Government grants and funding programs for Canadian small businesses
+- Compliance deadlines and requirements
+- Document requirements and where to submit them
+- Tax obligations (GST/HST, payroll, corporate)
+
+Always cite official Canadian government websites (canada.ca, ontario.ca, toronto.ca, etc.) when relevant. Be concise but thorough. Mention actual costs, deadlines, and links when possible. You are NOT a law firm. For complex legal matters, recommend consulting a qualified lawyer.`;
+}
+
+function buildWelcomeMsg(){
+  const n=currentUser?.name||'there';
+  const b=currentUser?.business||'your business';
+  const ind=currentUser?.industry?` ${currentUser.industry}`:'';
+  return `Hi ${n}! I'm your CommonCounsel AI advisor. I can help you with everything for ${b}${ind?', your'+ind+' business':''} — licences, grants, compliance deadlines, documents, and more. What do you need?`;
+}
+
+function addMsg(text,role){
+  const el=document.createElement('div');
+  el.className='msg '+role;
+  el.textContent=text;
+  const msgsEl=document.getElementById('chat-msgs');
+  msgsEl.appendChild(el);
+  msgsEl.scrollTop=msgsEl.scrollHeight;
+}
+
+function aiQ(btn){
+  document.getElementById('chat-input').value=btn.textContent;
+  sendChat();
+}
+
+async function sendChat(){
+  const input=document.getElementById('chat-input');
+  if(!input)return;
+  const q=input.value.trim();
+  if(!q)return;
+  input.value='';
+  input.disabled=true;
+  addMsg(q,'user');
+  chatHistory.push({role:'user',content:q});
+  
+  const loadId='load-'+Date.now();
+  const msgsEl=document.getElementById('chat-msgs');
+  const loadEl=document.createElement('div');
+  loadEl.className='msg ai loading';loadEl.id=loadId;
+  loadEl.innerHTML='<div class="dot"></div><div class="dot"></div><div class="dot"></div>';
+  msgsEl.appendChild(loadEl);
+  msgsEl.scrollTop=msgsEl.scrollHeight;
+  
+  try{
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'x-api-key':'YOUR_ANTHROPIC_API_KEY_HERE', // <-- PUT API KEY HERE
+        'Anthropic-Version':'2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body:JSON.stringify({model:'claude-3-5-sonnet-20240620',max_tokens:1000,system:buildSystem(),messages:chatHistory})
+    });
+    const el=document.getElementById(loadId);
+    if(el)el.remove();
+    if(!resp.ok) throw new Error('API Error');
+    const data=await resp.json();
+    const reply=data.content?.[0]?.text||'Error.';
+    chatHistory.push({role:'assistant',content:reply});
+    addMsg(reply,'ai');
+  }catch(e){
+    const el=document.getElementById(loadId);
+    if(el)el.remove();
+    addMsg('The AI advisor is offline right now. To enable it, insert your Anthropic API key in the source code!','ai');
+  }
+  input.disabled=false;
+  input.focus();
+}
+
+function toggleAISidebar(){
+  const sidebar=document.getElementById('ai-sidebar');
+  if(sidebar) sidebar.classList.toggle('hidden');
+}
+
+function addSidebarMsg(text,role){
+  const el=document.createElement('div');
+  el.className='ai-msg '+role;
+  el.innerHTML=`<div class="txt">${text}</div>`;
+  const msgsEl=document.getElementById('ai-sidebar-msgs');
+  msgsEl.appendChild(el);
+  msgsEl.scrollTop=msgsEl.scrollHeight;
+}
+
+async function sendSidebarChat(){
+  const input=document.getElementById('ai-sidebar-input');
+  if(!input)return;
+  const q=input.value.trim();
+  if(!q)return;
+  input.value='';
+  input.disabled=true;
+  
+  addSidebarMsg(q,'user');
+  sidebarChatHistory.push({role:'user',content:q});
+  
+  const msgsEl=document.getElementById('ai-sidebar-msgs');
+  const loadId='load-'+Date.now();
+  const loadEl=document.createElement('div');
+  loadEl.className='ai-msg loading';
+  loadEl.id=loadId;
+  loadEl.innerHTML='<div class="txt"><div class="ai-dots"><span></span><span></span><span></span></div></div>';
+  msgsEl.appendChild(loadEl);
+  msgsEl.scrollTop=msgsEl.scrollHeight;
+  
+  try{
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'x-api-key':'YOUR_ANTHROPIC_API_KEY_HERE', // <-- PUT API KEY HERE
+        'Anthropic-Version':'2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body:JSON.stringify({model:'claude-3-5-sonnet-20240620',max_tokens:800,system:buildSystem(),messages:sidebarChatHistory})
+    });
+    const el=document.getElementById(loadId);
+    if(el)el.remove();
+    if(!resp.ok) throw new Error('API Error');
+    const data=await resp.json();
+    const reply=data.content?.[0]?.text||'Error.';
+    sidebarChatHistory.push({role:'assistant',content:reply});
+    addSidebarMsg(reply,'ai');
+  }catch(e){
+    const el=document.getElementById(loadId);
+    if(el)el.remove();
+    addSidebarMsg('The AI advisor is offline. To enable it, insert your Anthropic API key in the source code!','ai');
+  }
+  input.disabled=false;
+  input.focus();
+}
+
+// INITIALIZATION
+addHover('button,a,[onclick],.ob-t,.ob-r,.ob-ck,.elig-ck,.fc,.sf,.ind,.cc,.tc,.pc,.di,.rmi,.gr,.cl,.hpill,.grant-card,.ff-pill,.ai-starter,.tl-link');
+</script>
+</body>
+</html>
